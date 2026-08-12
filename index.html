@@ -109,56 +109,27 @@
             margin-bottom: 20px;
         }
 
-        /* Form Elements */
-        textarea, input[type="text"] {
-            width: 100%;
-            background-color: #0f172a;
-            border: 1px solid #475569;
-            border-radius: 10px;
-            padding: 12px 15px;
-            color: #ffffff;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            resize: none;
+        /* Feature Card Items */
+        .feature-card {
+            background: #0f172a;
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            margin-bottom: 12px;
+            transition: 0.2s;
         }
-        textarea:focus, input[type="text"]:focus {
-            outline: none;
+        .feature-card:hover {
             border-color: #6366f1;
         }
-
-        .action-btn {
-            width: 100%;
-            background-color: #6366f1;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .action-btn:hover {
-            background-color: #4f46e5;
-        }
-
-        /* Result Box */
-        .result-box {
-            background-color: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 20px;
-        }
-        .result-title {
-            font-size: 1rem;
+        .feature-title {
             color: #f8fafc;
-            margin-bottom: 10px;
+            font-size: 1.05rem;
+            margin-bottom: 5px;
+            font-weight: 600;
         }
-        .result-content {
-            color: #cbd5e1;
-            font-size: 0.95ln;
-            line-height: 1.5;
+        .feature-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
         }
     </style>
 </head>
@@ -178,12 +149,11 @@
     <div class="sub-nav">
         <a href="#" class="nav-item active">🏠 হোম</a>
         <a href="#" class="nav-item">? ১. এআই প্রশ্নোত্তর</a>
-        <a href="#" class="nav-item">📚 ৩. স্মার্ট নোট মেকার</a>
-        <a href="#" class="nav-item">⚡ ২. কুইজ জেনারেটর</a>
-        <a href="#" class="nav-item">🏆 ৫. স্টুডেন্ট লিডারবোর্ড</a>
+        <a href="#" class="nav-item">📝 ২. উত্তর মূল্যায়ন</a>
+        <a href="#" class="nav-item">📢 ৩. নোটিশ বোর্ড</a>
     </div>
 
-    <!-- Dynamic Section / Card -->
+    <!-- Main Content Section -->
     <div class="container">
         <div class="card-title">
             🏠 স্বাগতম Ai Universe-এ!
@@ -192,17 +162,24 @@
             আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম:
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 15px;">
-            <div style="background: #0f172a; padding: 15px; border-radius: 10px; border: 1px solid #334155;">
-                <h4 style="color: #f8fafc; margin-bottom: 5px;">? এআই প্রশ্নোত্তর:</h4>
-                <p style="color: #94a3b8; font-size: 0.9rem;">যে কোনো প্রশ্ন লিখে সাথে সাথে সঠিক উত্তর জানুন।</p>
+        <div style="display: flex; flex-direction: column; gap: 5px;">
+            <div class="feature-card">
+                <div class="feature-title">? এআই প্রশ্নোত্তর:</div>
+                <div class="feature-desc">যে কোনো প্রশ্ন লিখে সাথে সাথে সঠিক উত্তর জানুন।</div>
             </div>
-            <div style="background: #0f172a; padding: 15px; border-radius: 10px; border: 1px solid #334155;">
-                <h4 style="color: #f8fafc; margin-bottom: 5px;">📊 স্কিল ও পারফরম্যান্স:</h4>
-                <p style="color: #94a3b8; font-size: 0.9rem;">আপনার পড়াশোনার সার্বিক অগ্রগতি দেখুন।</p>
+
+            <div class="feature-card">
+                <div class="feature-title">📝 উত্তর মূল্যায়ন:</div>
+                <div class="feature-desc">আপনার লেখা উত্তর পরীক্ষা করে সঠিক মূল্যায়ন ও ফিডব্যাক পান।</div>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-title">📢 নোটিশ বোর্ড:</div>
+                <div class="feature-desc">স্কুলের সর্বশেষ জরুরি ও গুরুত্বপূর্ণ নোটিশগুলো দেখুন।</div>
             </div>
         </div>
     </div>
 
 </body>
 </html>
+        
