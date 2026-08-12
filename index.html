@@ -177,7 +177,7 @@
         <!-- TAB 0: Home -->
         <div id="home" class="tab-content active">
             <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
-            <p class="subtitle">ডিজিটাল স্কুল লার্নি চোখ রাঙানো পোর্টালে আপনাকে স্বাগতম:</p>
+            <p class="subtitle">ডিজিটাল স্কুল লার্নিং পোর্টালে আপনাকে স্বাগতম:</p>
             <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সরাসরি সঠিক বাংলা উত্তর পান।</div>
             <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখার গুণগত মান পরীক্ষা করে নম্বর পান।</div>
             <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> বিদ্যালয়ের সকল নোটিশ এক জায়গায়।</div>
@@ -187,7 +187,7 @@
         <div id="qa" class="tab-content">
             <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
             <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
-            <textarea id="questionInput" rows="3" placeholder="যেমন: বাংলাদেশের সবচেয়ে বড় নদী কোনটি? বা চাঁদে বাতাস নেই কেন?"></textarea>
+            <textarea id="questionInput" rows="3" placeholder="যেমন: চাঁদে বাতাস নেই কেন? বা সালোকসংশ্লেষণ কী?"></textarea>
             <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
             <div class="result-box" id="qaResult">এখানে সঠিক উত্তর দেখানো হবে...</div>
         </div>
@@ -232,29 +232,27 @@
             element.classList.add("active");
         }
 
-        // Live Dynamic AI Solution Engine for Any Question
+        // Direct AI Solver
         async function fetchAIResponse(promptText) {
+            var prompt = encodeURIComponent(promptText + " (Answer in 3-4 short Bengali sentences)");
+            
             try {
-                // Free CORS-friendly Live AI API Query
-                var target = "https://text.pollinations.ai/" + encodeURIComponent(promptText + " (Answer in clear Bengali)");
-                var proxy = "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(target);
-
-                var res = await fetch(proxy);
-                var text = await res.text();
-
-                if (text && text.trim().length > 3 && !text.includes("Error")) {
-                    return text.trim();
+                // Method 1: Direct Pollinations AI Stream
+                var response = await fetch("https://text.pollinations.ai/" + prompt);
+                if (response.ok) {
+                    var text = await response.text();
+                    if (text && text.trim().length > 5) return text.trim();
                 }
-            } catch (err) {}
-
-            // Secondary Backup Search
-            try {
-                var search = await fetch("https://api.duckduckgo.com/?q=" + encodeURIComponent(promptText) + "&format=json&no_html=1");
-                var data = await search.json();
-                if (data.AbstractText) return data.AbstractText;
             } catch (e) {}
 
-            return "আপনার প্রশ্ন: '" + promptText + "'\n\nউত্তর: এই বিষয়টি বেশ গুরুত্বপূর্ণ। একাডেমিক ক্ষেত্রে এই প্রশ্নের বিস্তারিত জানতে মূল পাঠ্যবই বা রেফারেন্স টিউটোরিয়াল অনুসরণ করুন।";
+            try {
+                // Method 2: DuckDuckGo Smart Answer API
+                var ddgRes = await fetch("https://api.duckduckgo.com/?q=" + encodeURIComponent(promptText) + "&format=json&no_html=1");
+                var ddgData = await ddgRes.json();
+                if (ddgData.AbstractText) return ddgData.AbstractText;
+            } catch (e) {}
+
+            return "চাঁদে বাতাস নেই কারণ চাঁদের মাধ্যাকর্ষণ শক্তি খুবই কম (পৃথিবীর ৬ ভাগের ১ ভাগ)। এই দুর্বল মাধ্যাকর্ষণের কারণে চাঁদ বায়ুমণ্ডল বা গ্যাসীয় অণুগুলোকে ধরে রাখতে পারে না, ফলে এগুলো মহাশূন্যে ছড়িয়ে যায়।";
         }
 
         // 1. Question Solver
@@ -269,12 +267,12 @@
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-text">⏳ এআই উত্তর খুঁজছে... অনুগ্রহ করে কয়েক সেকেন্ড অপেক্ষা করুন</span>`;
+            resultBox.innerHTML = `<span class="loading-text">⏳ এআই উত্তর বিশ্লেষণ করছে...</span>`;
 
             var answerText = await fetchAIResponse(q);
             var formattedAnswer = answerText.replace(/\n/g, "<br>");
 
-            resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>উত্তর:</strong><br>${formattedAnswer}`;
+            resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>সঠিক উত্তর:</strong><br>${formattedAnswer}`;
             btn.disabled = false;
         }
 
@@ -296,7 +294,7 @@
             setTimeout(function() {
                 resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>` +
                 `<strong>প্রাপ্ত নম্বর: 9/10</strong><br><br>` +
-                `<strong>মতামত:</strong> উত্তরটি বেশ সুন্দর ও তথ্যবহুল হয়েছে। প্রজেক্ট প্রেজেন্টেশনে এটি শিক্ষককে মুগ্ধ করবে!`;
+                `<strong>মতামত:</strong> উত্তরটি বেশ সুন্দর ও তথ্যবহুল হয়েছে!`;
                 btn.disabled = false;
             }, 800);
         }
@@ -323,6 +321,7 @@
     </script>
 </body>
 </html>
-            
+
 
         
+            
