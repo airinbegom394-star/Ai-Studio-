@@ -1,13 +1,9 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ai Universe - Student Portal</title>
-
-    <!-- Puter.js Library for Free Unlimited Real AI -->
-    <script src="https://js.puter.com/v2/"></script>
-
     <style>
         * {
             box-sizing: border-box;
@@ -55,6 +51,7 @@
             cursor: pointer;
             font-size: 14px;
             white-space: nowrap;
+            transition: all 0.2s;
         }
 
         .tab-btn.active {
@@ -102,6 +99,11 @@
             color: #ffffff;
             border-radius: 6px;
             font-size: 14px;
+            outline: none;
+        }
+
+        textarea:focus, input:focus {
+            border-color: #38bdf8;
         }
 
         button.action-btn {
@@ -114,6 +116,7 @@
             cursor: pointer;
             font-size: 15px;
             font-weight: bold;
+            transition: 0.2s;
         }
 
         button.action-btn:hover {
@@ -171,23 +174,26 @@
 
     <div class="container">
 
+        <!-- TAB 0: Home -->
         <div id="home" class="tab-content active">
             <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
             <p class="subtitle">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম:</p>
-            <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> পৃথিবীর যেকোনো প্রশ্ন লিখে সাথে সাথে নিখুঁত উত্তর জানুন।</div>
-            <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখার মান পরীক্ষা করে মার্কস ও পরামর্শ পান।</div>
-            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ নোটিশ দেখুন।</div>
-            <div class="result-box">🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের তথ্য।</div>
+            <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সাথে সাথে সঠিক উত্তর জানুন।</div>
+            <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখা উত্তর পরীক্ষা করে ফিডব্যাক পান।</div>
+            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ জরুরি নোটিশ দেখুন।</div>
+            <div class="result-box">🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের প্রয়োজনীয় তথ্য।</div>
         </div>
 
+        <!-- TAB 1: Direct AI Q&A (No Popup, No Login) -->
         <div id="qa" class="tab-content">
-            <h2>❓ রিয়েল এআই প্রশ্ন ও সমাধান</h2>
+            <h2>❓ এআই প্রশ্ন ও সমাধান (স্মার্ট ভার্সন)</h2>
             <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
-            <textarea id="questionInput" rows="3" placeholder="যেমন: গণিত, বিজ্ঞান, ইতিহাস বা যেকোনো প্রশ্ন লিখুন..."></textarea>
+            <textarea id="questionInput" rows="3" placeholder="যেমন: বাংলাদেশের জেলা কয়টি? বা সালোকসংশ্লেষণ কাকে বলে?"></textarea>
             <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
-            <div class="result-box" id="qaResult">এখানে এআই-এর সঠিক উত্তর দেখানো হবে...</div>
+            <div class="result-box" id="qaResult">এখানে সঠিক উত্তর দেখানো হবে...</div>
         </div>
 
+        <!-- TAB 2: Direct AI Evaluator (No Popup, No Login) -->
         <div id="evaluator" class="tab-content">
             <h2>📝 উত্তর মূল্যায়ন ও মার্কিং</h2>
             <p class="subtitle">পরীক্ষার প্রশ্ন ও আপনার লেখা উত্তর দিন:</p>
@@ -197,12 +203,13 @@
             <div class="result-box" id="evalResult">মূল্যায়ন ও প্রাপ্ত নম্বর এখানে দেখাবে...</div>
         </div>
 
+        <!-- TAB 3: Notice Board -->
         <div id="notice" class="tab-content">
             <h2>📢 ডিজিটাল নোটিশ বোর্ড</h2>
             <div id="noticeContainer">
                 <div class="notice-card">
                     <strong>📌 বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৬</strong>
-                    <p style="margin-top: 5px; font-size: 14px;">আগামী ২৫শে আগস্ট অনুষ্ঠিত হবে।</p>
+                    <p style="margin-top: 5px; font-size: 14px;">আগামী ২৫শে আগস্ট স্কুলে অনুষ্ঠিত হবে।</p>
                     <span class="notice-date">তারিখ: ১০ আগস্ট, ২০২৬</span>
                 </div>
             </div>
@@ -214,6 +221,7 @@
             </div>
         </div>
 
+        <!-- TAB 4: School Info -->
         <div id="school_info" class="tab-content">
             <h2>🏫 স্কুল পরিচিতি ও তথ্য</h2>
             <div class="result-box">
@@ -225,6 +233,7 @@
 
     </div>
 
+    <!-- Direct Background Fetch Logic (No Sign in / No Popups) -->
     <script>
         function openTab(tabId, element) {
             var contents = document.getElementsByClassName("tab-content");
@@ -235,7 +244,27 @@
             element.classList.add("active");
         }
 
-        // 1. Real AI Question Solver using Puter AI
+        // Direct AI Call Function
+        async function fetchAIResponseDirect(promptText) {
+            try {
+                var query = encodeURIComponent("Answer in clear Bengali language: " + promptText);
+                var response = await fetch("https://text.pollinations.ai/" + query + "?model=mistral");
+                
+                if (!response.ok) throw new Error("Network error");
+                
+                var text = await response.text();
+                
+                // If backend returns API error json, fallback nicely
+                if (text.includes('"error"')) {
+                    return "উত্তরটি প্রস্তুত করা যাচ্ছে না। অনুগ্রহ করে প্রশ্নটি পরিষ্কার করে আবার চেষ্টা করুন।";
+                }
+                return text;
+            } catch (err) {
+                return "সংযোগ বিচ্ছিন্ন হয়েছে। অনুগ্রহ করে ইন্টারনেট চেক করে আবার চেষ্টা করুন।";
+            }
+        }
+
+        // 1. Solve Question
         async function solveQuestion() {
             var q = document.getElementById("questionInput").value.trim();
             var btn = document.getElementById("qaBtn");
@@ -247,25 +276,16 @@
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-text">⏳ এআই চিন্তা করছে ও উত্তর লিখছে... কয়েক সেকেন্ড অপেক্ষা করুন।</span>`;
+            resultBox.innerHTML = `<span class="loading-text">⏳ চিন্তা করা হচ্ছে... উত্তর তৈরি হচ্ছে, অপেক্ষা করুন।</span>`;
 
-            try {
-                var prompt = "You are an educational AI assistant for Bangladeshi school students. Answer the following question accurately, clearly, and nicely in Bengali language:\n\n" + q;
-                
-                // Puter AI Chat Call (No API Key Required)
-                var response = await puter.ai.chat(prompt);
-                var answerText = response.toString();
+            var answerText = await fetchAIResponseDirect(q);
+            var formattedAnswer = answerText.replace(/\n/g, "<br>");
 
-                var formattedAnswer = answerText.replace(/\n/g, "<br>");
-                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>এআই উত্তর:</strong><br>${formattedAnswer}`;
-            } catch (error) {
-                resultBox.innerHTML = `❌ উত্তর পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।`;
-            } finally {
-                btn.disabled = false;
-            }
+            resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>উত্তর:</strong><br>${formattedAnswer}`;
+            btn.disabled = false;
         }
 
-        // 2. Real AI Answer Evaluator
+        // 2. Evaluate Answer
         async function evaluateAnswer() {
             var q = document.getElementById("examQuestion").value.trim();
             var ans = document.getElementById("userAnswer").value.trim();
@@ -273,33 +293,19 @@
             var resultBox = document.getElementById("evalResult");
 
             if (!q || !ans) {
-                alert("প্রশ্ন এবং উত্তর দুটিই লিখুন!");
+                alert("প্রশ্ন এবং আপনার লেখা উত্তর দুটিই পূরণ করুন!");
                 return;
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-text">⏳ এআই আপনার উত্তরটি নিখুঁতভাবে মূল্যায়ন করছে...</span>`;
+            resultBox.innerHTML = `<span class="loading-text">⏳ উত্তর মূল্যায়ন করা হচ্ছে...</span>`;
 
-            try {
-                var prompt = `You are a school teacher in Bangladesh. Evaluate this answer.
-Question: ${q}
-Student Answer: ${ans}
+            var promptMsg = "You are a school teacher in Bangladesh. Question: " + q + ". Student answer: " + ans + ". Evaluate this answer out of 10 and give detailed helpful Bengali feedback.";
+            var evalText = await fetchAIResponseDirect(promptMsg);
+            var formattedEval = evalText.replace(/\n/g, "<br>");
 
-Write evaluation in Bengali language:
-1. Give a score out of 10.
-2. Explain strengths and weaknesses.
-3. Suggest how to improve.`;
-
-                var response = await puter.ai.chat(prompt);
-                var evalText = response.toString();
-
-                var formattedEval = evalText.replace(/\n/g, "<br>");
-                resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${formattedEval}`;
-            } catch (error) {
-                resultBox.innerHTML = `❌ মূল্যায়ন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।`;
-            } finally {
-                btn.disabled = false;
-            }
+            resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${formattedEval}`;
+            btn.disabled = false;
         }
 
         // 3. Notice Board Logic
@@ -324,6 +330,6 @@ Write evaluation in Bengali language:
     </script>
 </body>
 </html>
-                 
-
-                                    
+                     }
+                    
+                
