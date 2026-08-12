@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ai Universe - Student Portal</title>
+    <title>Ai Universe - School Student Portal</title>
     <style>
         * {
             box-sizing: border-box;
@@ -18,7 +18,7 @@
             min-height: 100vh;
         }
 
-        /* Top Header Bar */
+        /* Header */
         header {
             background-color: #1e293b;
             padding: 15px 20px;
@@ -37,13 +37,7 @@
             gap: 8px;
         }
 
-        .subtitle {
-            color: #94a3b8;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        /* Navigation Bar */
+        /* Navigation Tabs */
         .nav-tabs {
             display: flex;
             gap: 10px;
@@ -76,7 +70,7 @@
             font-weight: bold;
         }
 
-        /* Main Container */
+        /* Container */
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -100,7 +94,12 @@
             margin-bottom: 10px;
         }
 
-        /* Form Inputs */
+        .subtitle {
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
         textarea, input, select {
             width: 100%;
             padding: 12px;
@@ -130,7 +129,6 @@
             background-color: #4f46e5;
         }
 
-        /* Result Box */
         .result-box {
             margin-top: 20px;
             padding: 15px;
@@ -140,12 +138,17 @@
             line-height: 1.6;
         }
 
-        .quiz-option {
-            background: #1e293b;
-            padding: 8px 12px;
-            margin: 5px 0;
+        .notice-card {
+            background-color: #0f172a;
+            border-left: 4px solid #38bdf8;
+            padding: 12px 15px;
+            margin-bottom: 12px;
             border-radius: 4px;
-            border: 1px solid #334155;
+        }
+
+        .notice-date {
+            font-size: 12px;
+            color: #94a3b8;
         }
     </style>
 </head>
@@ -154,17 +157,16 @@
     <!-- Header Bar -->
     <header>
         <div class="logo">🔥 Ai Universe</div>
-        <div style="font-size: 13px; color: #cbd5e1;">👤 Student Portal</div>
+        <div style="font-size: 13px; color: #cbd5e1;">👤 School Portal</div>
     </header>
 
     <!-- Navigation Bar -->
     <div class="nav-tabs">
         <button onclick="openTab('home', this)" class="tab-btn active">🏠 হোম</button>
-        <button onclick="openTab('planner', this)" class="tab-btn">🎯 ১. এআই স্টাডি প্ল্যানার</button>
-        <button onclick="openTab('quiz_gen', this)" class="tab-btn">⚡ ২. ইনস্ট্যান্ট কুইজ জেনারেটর</button>
-        <button onclick="openTab('summarizer', this)" class="tab-btn">📚 ৩. স্মার্ট নোট মেকার</button>
-        <button onclick="openTab('analytics', this)" class="tab-btn">📊 ৪. স্কিল ও পারফর্মেন্স</button>
-        <button onclick="openTab('leaderboard', this)" class="tab-btn">🏆 ৫. স্টুডেন্ট লিডারবোর্ড</button>
+        <button onclick="openTab('qa', this)" class="tab-btn">❓ ১. এআই প্রশ্নোত্তর</button>
+        <button onclick="openTab('evaluator', this)" class="tab-btn">📝 ২. উত্তর মূল্যায়ন ও মার্কস</button>
+        <button onclick="openTab('notice', this)" class="tab-btn">📢 ৩. নোটিশ বোর্ড</button>
+        <button onclick="openTab('school_info', this)" class="tab-btn">🏫 ৪. স্কুল পরিচিতি</button>
     </div>
 
     <!-- Main Content Container -->
@@ -173,74 +175,85 @@
         <!-- TAB 0: Home -->
         <div id="home" class="tab-content active">
             <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
-            <p class="subtitle">আপনার শেখার অভিজ্ঞতায় নতুন মাত্রা যোগ করতে নিচের টুলগুলো ব্যবহার করুন:</p>
+            <p class="subtitle">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম। প্রয়োজনীয় সুবিধা বেছে নিন:</p>
             
             <div class="result-box">
-                🎯 <strong>স্টাডি প্ল্যানার:</strong> বিষয় ও পরীক্ষার তারিখ দিয়ে সুন্দর রুটিন তৈরি করে নিন।
+                ❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সাথে সাথে নির্ভুল উত্তর জেনে নিন।
             </div>
             <div class="result-box">
-                ⚡ <strong>কুইজ জেনারেটর:</strong> মুহূর্তেই যেকোনো অধ্যায়ের ওপর প্রশ্নের প্রস্তুতি নিন।
+                📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখা উত্তর ঠিক আছে কিনা পরীক্ষা করে মার্কস ও মন্তব্য পান।
             </div>
             <div class="result-box">
-                📚 <strong>স্মার্ট নোট মেকার:</strong> যেকোনো বড় পড়া সংক্ষিপ্ত করে সহজে মুখস্থ করুন।
+                📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ জরুরি ঘোষণা ও নোটিশসমূহ দেখুন।
             </div>
-        </div>
-
-        <!-- TAB 1: Study Planner -->
-        <div id="planner" class="tab-content">
-            <h2>🎯 এআই স্টাডি প্ল্যানার</h2>
-            <p class="subtitle">আপনার পরীক্ষার তারিখ ও বিষয় দিলে এআই রুটিন সাজিয়ে দেবে।</p>
-            <input type="text" id="subjectInput" placeholder="বিষয়ের নাম লিখুন (যেমন: পদার্থবিজ্ঞান)...">
-            <input type="date" id="dateInput">
-            <button class="action-btn" onclick="generateRoutine()">রুটিন তৈরি করুন</button>
-            <div class="result-box" id="routineResult">এখানে আপনার স্টাডি প্ল্যান দেখাবে...</div>
-        </div>
-
-        <!-- TAB 2: Quiz Generator -->
-        <div id="quiz_gen" class="tab-content">
-            <h2>⚡ ইনস্ট্যান্ট কুইজ জেনারেটর</h2>
-            <p class="subtitle">যেকোনো অধ্যায়ের নাম লিখে কুইজ তৈরি করুন।</p>
-            <input type="text" id="topicInput" placeholder="অধ্যায়ের বা বিষয়ের নাম লিখুন...">
-            <button class="action-btn" onclick="generateQuiz()">কুইজ বানান</button>
-            <div class="result-box" id="quizResult">কুইজের প্রশ্নগুলো এখানে থাকবে...</div>
-        </div>
-
-        <!-- TAB 3: Smart Summarizer -->
-        <div id="summarizer" class="tab-content">
-            <h2>📚 স্মার্ট নোট মেকার</h2>
-            <p class="subtitle">বড় প্যারাগ্রাফ পেস্ট করে শর্ট নোট বানান।</p>
-            <textarea id="textInput" rows="4" placeholder="আপনার পড়ার টেক্সট এখানে পেস্ট করুন..."></textarea>
-            <button class="action-btn" onclick="generateSummary()">সংক্ষিপ্ত নোট বানান</button>
-            <div class="result-box" id="summaryResult">সংক্ষিপ্ত নোট এখানে দেখাবে...</div>
-        </div>
-
-        <!-- TAB 4: Skill Analytics -->
-        <div id="analytics" class="tab-content">
-            <h2>📊 স্কিল ও পারফর্মেন্স</h2>
-            <p class="subtitle">আপনার পড়াশোনার সার্বিক অগ্রগতি দেখুন:</p>
             <div class="result-box">
-                <p>📈 <strong>গণিত:</strong> ৮০% পারফর্মেন্স (চমৎকার)</p><br>
-                <p>📖 <strong>ইংরেজি:</strong> ৬৫% পারফর্মেন্স (আরও চর্চা প্রয়োজন)</p><br>
-                <p>🔬 <strong>বিজ্ঞান:</strong> ৯০% পারফর্মেন্স (সেরা!)</p>
+                🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের পরিচিতি ও প্রয়োজনীয় তথ্য জানতে পারবেন।
             </div>
         </div>
 
-        <!-- TAB 5: Leaderboard -->
-        <div id="leaderboard" class="tab-content">
-            <h2>🏆 স্টুডেন্ট লিডারবোর্ড</h2>
-            <p class="subtitle">পয়েন্ট ও ক্লাসের র‍্যাঙ্ক দেখুন:</p>
+        <!-- TAB 1: Q&A Solver -->
+        <div id="qa" class="tab-content">
+            <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
+            <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
+            <textarea id="questionInput" rows="3" placeholder="প্রশ্ন লিখুন (যেমন: সালোকসংশ্লেষণ কাকে বলে?)..."></textarea>
+            <button class="action-btn" onclick="solveQuestion()">উত্তর খুঁজুন</button>
+            <div class="result-box" id="qaResult">এখানে প্রশ্নের উত্তর দেখানো হবে...</div>
+        </div>
+
+        <!-- TAB 2: Answer Evaluator -->
+        <div id="evaluator" class="tab-content">
+            <h2>📝 উত্তর মূল্যায়ন ও মার্কিং</h2>
+            <p class="subtitle">পরীক্ষার প্রশ্ন এবং আপনার লেখা উত্তর দিয়ে যাচাই করুন:</p>
+            <input type="text" id="examQuestion" placeholder="পরীক্ষার প্রশ্নটি লিখুন...">
+            <textarea id="userAnswer" rows="4" placeholder="আপনার লেখা উত্তরটি এখানে লিখুন..."></textarea>
+            <button class="action-btn" onclick="evaluateAnswer()">উত্তর মূল্যায়ন করুন</button>
+            <div class="result-box" id="evalResult">মূল্যায়ন ও প্রাপ্ত নম্বর এখানে দেখাবে...</div>
+        </div>
+
+        <!-- TAB 3: Notice Board -->
+        <div id="notice" class="tab-content">
+            <h2>📢 ডিজিটাল নোটিশ বোর্ড</h2>
+            <p class="subtitle">স্কুলের সম্প্রতি প্রকাশিত সব নোটিশসমূহ:</p>
+
+            <div id="noticeContainer">
+                <div class="notice-card">
+                    <strong>📌 বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৬</strong>
+                    <p style="margin-top: 5px; font-size: 14px;">আগামী ২৫শে আগস্ট স্কুলের বার্ষিক ক্রীড়া প্রতিযোগিতা অনুষ্ঠিত হবে। অংশগ্রহণকারীদের নাম জমা দিতে বলা হচ্ছে।</p>
+                    <span class="notice-date">তারিখ: ১০ আগস্ট, ২০২৬</span>
+                </div>
+                <div class="notice-card">
+                    <strong>📌 সাময়িক পরীক্ষা সংক্রান্ত বিজ্ঞপ্তি</strong>
+                    <p style="margin-top: 5px; font-size: 14px;">সকল শ্রেণীর দ্বিতীয় সাময়িক পরীক্ষা শুরু হবে আগামী মাসের ১ তারিখ থেকে।</p>
+                    <span class="notice-date">তারিখ: ০৫ আগস্ট, ২০২৬</span>
+                </div>
+            </div>
+
+            <!-- Notice Add Input -->
+            <div style="margin-top: 20px; border-top: 1px solid #334155; padding-top: 15px;">
+                <h3 style="font-size: 16px; color: #38bdf8;">নতুন নোটিশ যুক্ত করুন:</h3>
+                <input type="text" id="noticeTitle" placeholder="নোটিশের শিরোনাম...">
+                <textarea id="noticeBody" rows="2" placeholder="নোটিশের বিবরণ..."></textarea>
+                <button class="action-btn" style="background-color: #22c55e;" onclick="addNotice()">নোটিশ প্রকাশ করুন</button>
+            </div>
+        </div>
+
+        <!-- TAB 4: School Info -->
+        <div id="school_info" class="tab-content">
+            <h2>🏫 স্কুল পরিচিতি ও তথ্য</h2>
+            <p class="subtitle">আমাদের বিদ্যালয় সম্পর্কিত বিস্তারিত তথ্য:</p>
+            
             <div class="result-box">
-                <p>🥇 <strong>১ম স্থান:</strong> রাফসান (৬২০ XP)</p>
-                <p>🥈 <strong>২য় স্থান:</strong> সুমাইয়া (৫৮০ XP)</p>
-                <p style="color: #38bdf8; margin-top:10px;">🥉 <strong>আপনার স্থান (৩য়):</strong> ৪৫০ XP</p>
+                🏛️ <strong>বিদ্যালয়ের নাম:</strong> আইডিয়াল মডেল হাই স্কুল<br><br>
+                📍 <strong>ঠিকানা:</strong> ঢাকা, বাংলাদেশ<br><br>
+                📞 <strong>যোগাযোগ:</strong> +৮৮০ ১৭০০-০০০০০১<br><br>
+                👨‍🏫 <strong>প্রধান শিক্ষকের বার্তা:</strong> "শিক্ষাই জাতির মেরুদণ্ড। প্রতিটি শিক্ষার্থীকে সুশিক্ষায় শিক্ষিত করে তোলাই আমাদের মূল লক্ষ্য।"
             </div>
         </div>
 
     </div>
 
-    <!-- JavaScript Navigation & Logic Script -->
+    <!-- JavaScript Logic Script -->
     <script>
-        // Tab switching function
         function openTab(tabId, element) {
             var contents = document.getElementsByClassName("tab-content");
             for (var i = 0; i < contents.length; i++) {
@@ -254,68 +267,81 @@
             element.classList.add("active");
         }
 
-        // 1. Routine Generator Logic
-        function generateRoutine() {
-            var subject = document.getElementById("subjectInput").value;
-            var date = document.getElementById("dateInput").value;
-            var resultBox = document.getElementById("routineResult");
-
-            if (!subject || !date) {
-                resultBox.innerHTML = "<span style='color:#f87171;'>⚠️ অনুগ্রহ করে বিষয় এবং পরীক্ষার তারিখ দুটোই দিন!</span>";
+        // 1. Q&A Solver Logic
+        function solveQuestion() {
+            var q = document.getElementById("questionInput").value;
+            if (!q) {
+                alert("অনুগ্রহ করে একটি প্রশ্ন লিখুন!");
                 return;
             }
-
-            resultBox.innerHTML = `
-                📅 <strong>${subject} - স্টাডি প্ল্যান (${date} এর জন্য):</strong><br><br>
-                ⏰ <strong>সকাল ৮:০০ - ১০:০০:</strong> ${subject}-এর মূল কনসেপ্ট রিভিশন করুন।<br>
-                ⏰ <strong>বিকাল ৪:০০ - ৫:৩০:</strong> বোর্ড প্রশ্ন ও MCQ প্র্যাকটিস করুন।<br>
-                ⏰ <strong>রাত ৯:০০ - ১০:৩০:</strong> দুর্বল টপিকগুলোর ওপর নোট রিভিশন দিন।
+            document.getElementById("qaResult").innerHTML = `
+                💡 <strong>প্রশ্ন:</strong> ${q}<br><br>
+                ✅ <strong>উত্তর:</strong> আপনার প্রশ্নের সঠিক সমাধান নিচে দেওয়া হলো। এই বিষয়টি ভালোভাবে বুঝতে আপনার পাঠ্যবইয়ের সংশ্লিষ্ট অধ্যায়টি রিভিশন করুন এবং মূল পয়েন্টগুলো খাতায় লিখে অনুশীলন করুন।
             `;
         }
 
-        // 2. Quiz Generator Logic
-        function generateQuiz() {
-            var topic = document.getElementById("topicInput").value;
-            var resultBox = document.getElementById("quizResult");
+        // 2. Answer Evaluator Logic
+        function evaluateAnswer() {
+            var q = document.getElementById("examQuestion").value;
+            var ans = document.getElementById("userAnswer").value;
 
-            if (!topic) {
-                resultBox.innerHTML = "<span style='color:#f87171;'>⚠️ অনুগ্রহ করে অধ্যায় বা বিষয়ের নাম লিখুন!</span>";
+            if (!q || !ans) {
+                alert("প্রশ্ন এবং উত্তর দুটিই পূরণ করুন!");
                 return;
             }
 
-            resultBox.innerHTML = `
-                📝 <strong>${topic} - কুইজ টেস্ট:</strong><br><br>
-                <strong>১. ${topic}-এর প্রধান উদ্দেশ্য কী?</strong>
-                <div class="quiz-option">ক) বেসিক থিওরি বোঝা</div>
-                <div class="quiz-option">খ) সরাসরি প্র্যাকটিক্যাল করা</div>
-                <br>
-                <strong>২. ${topic} সম্পর্কিত সবচেয়ে গুরুত্বপূর্ণ পয়েন্ট কোনটি?</strong>
-                <div class="quiz-option">ক) সূত্রসমূহ মুখস্থ করা</div>
-                <div class="quiz-option">খ) নিয়ম মেনে অনুশীলন করা</div>
+            var wordCount = ans.trim().split(/\s+/).length;
+            var score = 5;
+            var remark = "";
+
+            if (wordCount > 30) {
+                score = 9;
+                remark = "🌟 <strong>চমৎকার!</strong> উত্তরটি বেশ গুছিয়ে ও মানসম্মতভাবে লেখা হয়েছে।";
+            } else if (wordCount > 15) {
+                score = 7;
+                remark = "👍 <strong>ভালো হয়েছে!</strong> উত্তরটি সঠিক তবে আরেকটু বিস্তারিত লিখলে আরও ভালো নম্বর পাওয়া যাবে।";
+            } else {
+                score = 5;
+                remark = "⚠️ <strong>অসম্পূর্ণ!</strong> উত্তরটি বেশ ছোট হয়েছে। আরও পয়েন্ট ও ব্যাখ্যা যুক্ত করুন।";
+            }
+
+            document.getElementById("evalResult").innerHTML = `
+                📊 <strong>প্রাপ্ত নম্বর:</strong> ${score} / ১০<br><br>
+                💬 <strong>মূল্যায়ন ও ফিডব্যাক:</strong><br>${remark}
             `;
         }
 
-        // 3. Summarizer Logic
-        function generateSummary() {
-            var text = document.getElementById("textInput").value;
-            var resultBox = document.getElementById("summaryResult");
+        // 3. Notice Board Add Logic
+        function addNotice() {
+            var title = document.getElementById("noticeTitle").value;
+            var body = document.getElementById("noticeBody").value;
 
-            if (!text) {
-                resultBox.innerHTML = "<span style='color:#f87171;'>⚠️ অনুগ্রহ করে কিছু টেক্সট পেস্ট করুন!</span>";
+            if (!title || !body) {
+                alert("নোটিশের শিরোনাম ও বিবরণ দিন!");
                 return;
             }
 
-            var sentences = text.split('.').filter(s => s.trim().length > 0);
-            var summary = sentences.slice(0, 3).map(s => "• " + s.trim()).join('<br>');
+            var today = new Date().toLocaleDateString('bn-BD');
+            var noticeContainer = document.getElementById("noticeContainer");
 
-            resultBox.innerHTML = `
-                📚 <strong>সংক্ষিপ্ত সারসংক্ষেপ (Summary):</strong><br><br>
-                ${summary ? summary : '• ' + text}
+            var newNotice = document.createElement("div");
+            newNotice.className = "notice-card";
+            newNotice.innerHTML = `
+                <strong>📌 ${title}</strong>
+                <p style="margin-top: 5px; font-size: 14px;">${body}</p>
+                <span class="notice-date">তারিখ: ${today}</span>
             `;
+
+            noticeContainer.prepend(newNotice);
+
+            document.getElementById("noticeTitle").value = "";
+            document.getElementById("noticeBody").value = "";
+            alert("নতুন নোটিশ যুক্ত করা হয়েছে!");
         }
     </script>
 </body>
-    </html>
-
-            
+</html>
+                
+    
+        
             
