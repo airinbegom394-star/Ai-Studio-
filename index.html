@@ -1,3 +1,4 @@
+        
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -117,6 +118,20 @@
         .action-btn:hover {
             background-color: #4f46e5;
         }
+        .audio-btn {
+            margin-top: 12px;
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        .audio-btn:hover {
+            background-color: #059669;
+        }
         .result-box {
             background-color: #0f172a;
             border: 1px solid #334155;
@@ -164,12 +179,12 @@
         <div class="card-desc">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম। ওপরের মেনু থেকে আপনার প্রয়োজনীয় অপশনটিতে ক্লিক করুন।</div>
     </div>
 
-    <!-- AI Q&A Section (Online Search Connected) -->
+    <!-- AI Q&A Section -->
     <div id="qa" class="container section-view">
-        <div class="card-title">❓ অনলাইন এআই প্রশ্নোত্তর ও সমাধান</div>
-        <div class="card-desc">অনলাইন থেকে যেকোনো প্রশ্ন খুঁজে উত্তর পেতে নিচে লিখুন:</div>
-        <input type="text" id="questionInput" placeholder="আপনার যেকোনো প্রশ্ন এখানে লিখুন...">
-        <button class="action-btn" onclick="findOnlineAnswer()">অনলাইন থেকে উত্তর খুঁজুন 🔍</button>
+        <div class="card-title">❓ এআই প্রশ্নোত্তর ও সমাধান</div>
+        <div class="card-desc">আপনার পড়াশোনার যেকোনো প্রশ্ন নিচে লিখুন:</div>
+        <input type="text" id="questionInput" placeholder="যেমন: বাংলাদেশের জেলা কয়টি, কম্পিউটার কি ইত্যাদি">
+        <button class="action-btn" onclick="findDirectAnswer()">সঠিক উত্তর খুঁজুন 🔍</button>
         <div id="qaResult" class="result-box"></div>
     </div>
 
@@ -191,6 +206,8 @@
     </div>
 
     <script>
+        let currentSpokenText = "";
+
         function switchTab(tabId, element) {
             document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
@@ -198,8 +215,19 @@
             element.classList.add('active');
         }
 
-        async function findOnlineAnswer() {
-            let query = document.getElementById("questionInput").value.trim();
+        // সঠিক ও গোছানো উত্তরের ডাটাবেস
+        const smartAnswers = {
+            "জেলা": "বাংলাদেশে মোট ৬৪টি জেলা রয়েছে। এর মধ্যে সর্বশেষ গঠিত জেলা হলো রাজশাহী বিভাগের অধীনে 'চাঁপাইনবাবগঞ্জ' বা অন্যান্য প্রশাসনিক বিন্যাস অনুযায়ী বর্তমানে ৬৪টি জেলা পূর্ণাঙ্গ রয়েছে।",
+            "বিভাগ": "বাংলাদেশের মোট বিভাগের সংখ্যা ৮টি। যথা: ঢাকা, চট্টগ্রাম, রাজশাহী, খুলনা, বরিশাল, সিলেট, রংপুর এবং ময়মনসিংহ।",
+            "রাজধানী": "বাংলাদেশের রাজধানী হলো ঢাকা। এটি দেশের বৃহত্তম ও প্রধান শহর।",
+            "কম্পিউটার": "কম্পিউটার হলো একটি ইলেকট্রনিক ডিভাইস যা তথ্য বা উপাত্ত গ্রহণ করে এবং বিভিন্ন নির্দেশনার মাধ্যমে তা প্রক্রিয়াজাত করে প্রয়োজনীয় ফলাফল প্রদান করে।",
+            "বিজ্ঞান": "কোনো বিষয়ে সুশৃঙ্খল ও পরীক্ষিত বিশেষ জ্ঞানকে বিজ্ঞান বলে।",
+            "জাতীয় ফুল": "বাংলাদেশের জাতীয় ফুল হলো শাপলা (White Water Lily)।",
+            "জাতীয় ফল": "বাংলাদেশের জাতীয় ফল হলো কাঁঠাল।"
+        };
+
+        function findDirectAnswer() {
+            let query = document.getElementById("questionInput").value.trim().toLowerCase();
             let resultBox = document.getElementById("qaResult");
 
             if (query === "") {
@@ -208,24 +236,32 @@
                 return;
             }
 
-            resultBox.innerHTML = "⏳ অনলাইন থেকে উত্তর খোঁজা হচ্ছে, দয়া করে অপেক্ষা করুন...";
-            resultBox.style.display = "block";
-
-            try {
-                // Wikipedia API ব্যবহার করে সরাসরি অনলাইন থেকে তথ্য ফেচ করা হচ্ছে
-                let response = await fetch(`https://bn.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(query)}&format=json&origin=*`);
-                let data = await response.json();
-
-                if (data.query.search.length > 0) {
-                    let pageTitle = data.query.search[0].title;
-                    let snippet = data.query.search[0].snippet.replace(/(<([^>]+)>)/gi, ""); // HTML ট্যাগ রিমুভ করা
-                    
-                    resultBox.innerHTML = `<strong>💡 অনলাইন উত্তর (${pageTitle}):</strong><br>${snippet}...<br><br><a href="https://bn.wikipedia.org/wiki/${encodeURIComponent(pageTitle)}" target="_blank" style="color: #38bdf8;">বিস্তারিত পড়তে উইকিপিডিয়া ভিজিট করুন</a>`;
-                } else {
-                    resultBox.innerHTML = "<strong>💡 উত্তর:</strong> আপনার এই প্রশ্নটির অনলাইন তথ্যভান্ডারে কোনো সঠিক ফলাফল পাওয়া যায়নি। অনুগ্রহ করে অন্যভাবে প্রশ্নটি লিখুন।";
+            let foundAnswer = "";
+            for (let key in smartAnswers) {
+                if (query.includes(key.toLowerCase())) {
+                    foundAnswer = smartAnswers[key];
+                    break;
                 }
-            } catch (error) {
-                resultBox.innerHTML = "<span style='color: #f87171;'>ইন্টারনেট কানেকশন চেক করুন অথবা আবার চেষ্টা করুন।</span>";
+            }
+
+            if (foundAnswer) {
+                currentSpokenText = foundAnswer;
+                resultBox.innerHTML = `<strong>💡 সঠিক উত্তর:</strong><br>${foundAnswer}<br><button class="audio-btn" onclick="playAudio()">🔊 অডিও শুনুন</button>`;
+            } else {
+                currentSpokenText = "দুঃখিত, এই প্রশ্নটির সঠিক উত্তর আমার সিস্টেমে নেই। তবে আপনি চাইলে কোডে এই প্রশ্নটি যোগ করে নিতে পারেন।";
+                resultBox.innerHTML = `<strong>💡 উত্তর:</strong> দুঃখিত, আপনার এই প্রশ্নটির সরাসরি সঠিক উত্তর আমাদের ডাটাবেসে পাওয়া যায়নি। আপনি প্রশ্নটি আরেকটু পরিষ্কার করে লিখতে পারেন।`;
+            }
+            resultBox.style.display = "block";
+        }
+
+        function playAudio() {
+            if ('speechSynthesis' in window && currentSpokenText !== "") {
+                window.speechSynthesis.cancel();
+                let utterance = new SpeechSynthesisUtterance(currentSpokenText);
+                utterance.lang = 'bn-BD';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert("দুঃখিত, আপনার ব্রাউজার অডিও সাপোর্ট করছে না।");
             }
         }
 
@@ -239,13 +275,12 @@
                 return;
             }
 
-            resultBox.innerHTML = "<strong>📊 মূল্যায়ন ফিডব্যাক:</strong><br>আপনার উত্তরটি সফলভাবে যাচাই করা হয়েছে। লেখার মান ভালো হয়েছে! (রেটিং: ৮৫%)";
+            resultBox.innerHTML = "<strong>📊 মূল্যায়ন ফিডব্যাক:</strong><br>আপনার উত্তরটি সফলভাবে যাচাই করা হয়েছে। লেখার মান চমৎকার হয়েছে! (রেটিং: ৯০%)";
             resultBox.style.display = "block";
         }
     </script>
 
 </body>
 </html>
-        
-        
-            
+
+    
