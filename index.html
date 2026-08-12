@@ -40,6 +40,7 @@
         .subtitle {
             color: #94a3b8;
             font-size: 14px;
+            margin-bottom: 15px;
         }
 
         /* Navigation Bar */
@@ -122,6 +123,7 @@
             cursor: pointer;
             font-size: 15px;
             font-weight: bold;
+            transition: 0.2s;
         }
 
         button.action-btn:hover {
@@ -135,6 +137,15 @@
             background-color: #0f172a;
             border: 1px solid #334155;
             border-radius: 8px;
+            line-height: 1.6;
+        }
+
+        .quiz-option {
+            background: #1e293b;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border: 1px solid #334155;
         }
     </style>
 </head>
@@ -165,13 +176,13 @@
             <p class="subtitle">আপনার শেখার অভিজ্ঞতায় নতুন মাত্রা যোগ করতে নিচের টুলগুলো ব্যবহার করুন:</p>
             
             <div class="result-box">
-                🎯 <strong>স্টাডি প্ল্যানার:</strong> আপনার রুটিন ও পরীক্ষার তারিখ অনুযায়ী পড়ার পরিকল্পনা তৈরি করুন।
+                🎯 <strong>স্টাডি প্ল্যানার:</strong> বিষয় ও পরীক্ষার তারিখ দিয়ে সুন্দর রুটিন তৈরি করে নিন।
             </div>
             <div class="result-box">
-                ⚡ <strong>কুইজ জেনারেটর:</strong> মুহূর্তেই যেকোনো বিষয়ের ওপর গুরুত্বপূর্ণ MCQ তৈরি করুন।
+                ⚡ <strong>কুইজ জেনারেটর:</strong> মুহূর্তেই যেকোনো অধ্যায়ের ওপর প্রশ্নের প্রস্তুতি নিন।
             </div>
             <div class="result-box">
-                📚 <strong>স্মার্ট নোট মেকার:</strong> যেকোনো বড় প্যারাগ্রাফ বা সিলেবাস থেকে মূল পয়েন্টের নোট বের করুন।
+                📚 <strong>স্মার্ট নোট মেকার:</strong> যেকোনো বড় পড়া সংক্ষিপ্ত করে সহজে মুখস্থ করুন।
             </div>
         </div>
 
@@ -179,71 +190,132 @@
         <div id="planner" class="tab-content">
             <h2>🎯 এআই স্টাডি প্ল্যানার</h2>
             <p class="subtitle">আপনার পরীক্ষার তারিখ ও বিষয় দিলে এআই রুটিন সাজিয়ে দেবে।</p>
-            <input type="text" placeholder="বিষয়ের নাম লিখুন (যেমন: পদার্থবিজ্ঞান)...">
-            <input type="date">
-            <button class="action-btn">রুটিন তৈরি করুন</button>
-            <div class="result-box">রুটিনের ফলাফল এখানে দেখাবে...</div>
+            <input type="text" id="subjectInput" placeholder="বিষয়ের নাম লিখুন (যেমন: পদার্থবিজ্ঞান)...">
+            <input type="date" id="dateInput">
+            <button class="action-btn" onclick="generateRoutine()">রুটিন তৈরি করুন</button>
+            <div class="result-box" id="routineResult">এখানে আপনার স্টাডি প্ল্যান দেখাবে...</div>
         </div>
 
         <!-- TAB 2: Quiz Generator -->
         <div id="quiz_gen" class="tab-content">
             <h2>⚡ ইনস্ট্যান্ট কুইজ জেনারেটর</h2>
-            <p class="subtitle">যেকোনো বিষয় থেকে শর্ট কুইজ তৈরি করুন।</p>
-            <input type="text" placeholder="অধ্যায়ের নাম লিখুন...">
-            <button class="action-btn">কুইজ বানান</button>
-            <div class="result-box">কুইজের প্রশ্নগুলো এখানে থাকবে...</div>
+            <p class="subtitle">যেকোনো অধ্যায়ের নাম লিখে কুইজ তৈরি করুন।</p>
+            <input type="text" id="topicInput" placeholder="অধ্যায়ের বা বিষয়ের নাম লিখুন...">
+            <button class="action-btn" onclick="generateQuiz()">কুইজ বানান</button>
+            <div class="result-box" id="quizResult">কুইজের প্রশ্নগুলো এখানে থাকবে...</div>
         </div>
 
         <!-- TAB 3: Smart Summarizer -->
         <div id="summarizer" class="tab-content">
             <h2>📚 স্মার্ট নোট মেকার</h2>
             <p class="subtitle">বড় প্যারাগ্রাফ পেস্ট করে শর্ট নোট বানান।</p>
-            <textarea rows="4" placeholder="আপনার পড়ার টেক্সট পেস্ট করুন..."></textarea>
-            <button class="action-btn">সংক্ষিপ্ত নোট বানান</button>
-            <div class="result-box">সংক্ষিপ্ত নোট এখানে দেখাবে...</div>
+            <textarea id="textInput" rows="4" placeholder="আপনার পড়ার টেক্সট এখানে পেস্ট করুন..."></textarea>
+            <button class="action-btn" onclick="generateSummary()">সংক্ষিপ্ত নোট বানান</button>
+            <div class="result-box" id="summaryResult">সংক্ষিপ্ত নোট এখানে দেখাবে...</div>
         </div>
 
         <!-- TAB 4: Skill Analytics -->
         <div id="analytics" class="tab-content">
             <h2>📊 স্কিল ও পারফর্মেন্স</h2>
-            <p class="subtitle">আপনার পড়ার অগ্রগতি পরীক্ষা করুন।</p>
+            <p class="subtitle">আপনার পড়াশোনার সার্বিক অগ্রগতি দেখুন:</p>
             <div class="result-box">
-                <p><strong>গণিত:</strong> ৮০% অগ্রগতি</p>
-                <p><strong>ইংরেজি:</strong> ৬৫% অগ্রগতি</p>
+                <p>📈 <strong>গণিত:</strong> ৮০% পারফর্মেন্স (চমৎকার)</p><br>
+                <p>📖 <strong>ইংরেজি:</strong> ৬৫% পারফর্মেন্স (আরও চর্চা প্রয়োজন)</p><br>
+                <p>🔬 <strong>বিজ্ঞান:</strong> ৯০% পারফর্মেন্স (সেরা!)</p>
             </div>
         </div>
 
         <!-- TAB 5: Leaderboard -->
         <div id="leaderboard" class="tab-content">
             <h2>🏆 স্টুডেন্ট লিডারবোর্ড</h2>
-            <p class="subtitle">পয়েন্ট ও ক্লাসের র‍্যাঙ্ক দেখুন।</p>
+            <p class="subtitle">পয়েন্ট ও ক্লাসের র‍্যাঙ্ক দেখুন:</p>
             <div class="result-box">
-                <p><strong>আপনার বর্তমান পয়েন্ট:</strong> ৪৫০ XP</p>
-                <p><strong>ক্লাস র‍্যাঙ্ক:</strong> ৩য়</p>
+                <p>🥇 <strong>১ম স্থান:</strong> রাফসান (৬২০ XP)</p>
+                <p>🥈 <strong>২য় স্থান:</strong> সুমাইয়া (৫৮০ XP)</p>
+                <p style="color: #38bdf8; margin-top:10px;">🥉 <strong>আপনার স্থান (৩য়):</strong> ৪৫০ XP</p>
             </div>
         </div>
 
     </div>
 
-    <!-- JavaScript Navigation Script -->
+    <!-- JavaScript Navigation & Logic Script -->
     <script>
+        // Tab switching function
         function openTab(tabId, element) {
-            // Hide all tab contents
             var contents = document.getElementsByClassName("tab-content");
             for (var i = 0; i < contents.length; i++) {
                 contents[i].classList.remove("active");
             }
-
-            // Remove active class from all buttons
             var buttons = document.querySelectorAll(".nav-tabs .tab-btn");
             for (var j = 0; j < buttons.length; j++) {
                 buttons[j].classList.remove("active");
             }
-
-            // Show current tab and set active button
             document.getElementById(tabId).classList.add("active");
             element.classList.add("active");
         }
+
+        // 1. Routine Generator Logic
+        function generateRoutine() {
+            var subject = document.getElementById("subjectInput").value;
+            var date = document.getElementById("dateInput").value;
+            var resultBox = document.getElementById("routineResult");
+
+            if (!subject || !date) {
+                resultBox.innerHTML = "<span style='color:#f87171;'>⚠️ অনুগ্রহ করে বিষয় এবং পরীক্ষার তারিখ দুটোই দিন!</span>";
+                return;
+            }
+
+            resultBox.innerHTML = `
+                📅 <strong>${subject} - স্টাডি প্ল্যান (${date} এর জন্য):</strong><br><br>
+                ⏰ <strong>সকাল ৮:০০ - ১০:০০:</strong> ${subject}-এর মূল কনসেপ্ট রিভিশন করুন।<br>
+                ⏰ <strong>বিকাল ৪:০০ - ৫:৩০:</strong> বোর্ড প্রশ্ন ও MCQ প্র্যাকটিস করুন।<br>
+                ⏰ <strong>রাত ৯:০০ - ১০:৩০:</strong> দুর্বল টপিকগুলোর ওপর নোট রিভিশন দিন।
+            `;
+        }
+
+        // 2. Quiz Generator Logic
+        function generateQuiz() {
+            var topic = document.getElementById("topicInput").value;
+            var resultBox = document.getElementById("quizResult");
+
+            if (!topic) {
+                resultBox.innerHTML = "<span style='color:#f87171;'>⚠️ অনুগ্রহ করে অধ্যায় বা বিষয়ের নাম লিখুন!</span>";
+                return;
+            }
+
+            resultBox.innerHTML = `
+                📝 <strong>${topic} - কুইজ টেস্ট:</strong><br><br>
+                <strong>১. ${topic}-এর প্রধান উদ্দেশ্য কী?</strong>
+                <div class="quiz-option">ক) বেসিক থিওরি বোঝা</div>
+                <div class="quiz-option">খ) সরাসরি প্র্যাকটিক্যাল করা</div>
+                <br>
+                <strong>২. ${topic} সম্পর্কিত সবচেয়ে গুরুত্বপূর্ণ পয়েন্ট কোনটি?</strong>
+                <div class="quiz-option">ক) সূত্রসমূহ মুখস্থ করা</div>
+                <div class="quiz-option">খ) নিয়ম মেনে অনুশীলন করা</div>
+            `;
+        }
+
+        // 3. Summarizer Logic
+        function generateSummary() {
+            var text = document.getElementById("textInput").value;
+            var resultBox = document.getElementById("summaryResult");
+
+            if (!text) {
+                resultBox.innerHTML = "<span style='color:#f87171;'>⚠️ অনুগ্রহ করে কিছু টেক্সট পেস্ট করুন!</span>";
+                return;
+            }
+
+            var sentences = text.split('.').filter(s => s.trim().length > 0);
+            var summary = sentences.slice(0, 3).map(s => "• " + s.trim()).join('<br>');
+
+            resultBox.innerHTML = `
+                📚 <strong>সংক্ষিপ্ত সারসংক্ষেপ (Summary):</strong><br><br>
+                ${summary ? summary : '• ' + text}
+            `;
+        }
     </script>
 </body>
-</html>
+    </html>
+
+            
+            
