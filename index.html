@@ -1,3 +1,4 @@
+            
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -12,8 +13,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         body {
-            background-color: #0b1120;
-            color: #ffffff;
+            background-color: #f8fafc;
+            color: #1e293b;
             padding-bottom: 50px;
         }
         header {
@@ -21,15 +22,16 @@
             justify-content: space-between;
             align-items: center;
             padding: 15px 20px;
-            background-color: #0f172a;
-            border-bottom: 1px solid #1e293b;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
         }
         .logo {
             display: flex;
             align-items: center;
             font-size: 1.2rem;
             font-weight: bold;
-            color: #38bdf8;
+            color: #0284c7;
         }
         .logo span {
             color: #f97316;
@@ -39,7 +41,7 @@
         .portal-btn {
             background: none;
             border: none;
-            color: #94a3b8;
+            color: #64748b;
             font-size: 0.9rem;
             cursor: pointer;
         }
@@ -48,15 +50,16 @@
             gap: 10px;
             padding: 15px 20px;
             overflow-x: auto;
-            background-color: #0f172a;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
             white-space: nowrap;
         }
         .sub-nav::-webkit-scrollbar {
             display: none;
         }
         .nav-item {
-            background-color: #1e293b;
-            color: #cbd5e1;
+            background-color: #f1f5f9;
+            color: #475569;
             padding: 8px 16px;
             border-radius: 8px;
             cursor: pointer;
@@ -72,29 +75,29 @@
         .container {
             max-width: 600px;
             margin: 20px auto;
-            background-color: #1e293b;
-            border: 1px solid #334155;
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 25px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
         }
         .card-title {
-            color: #38bdf8;
+            color: #0284c7;
             font-size: 1.4rem;
             margin-bottom: 8px;
         }
         .card-desc {
-            color: #94a3b8;
+            color: #64748b;
             font-size: 0.95rem;
             margin-bottom: 20px;
         }
         input[type="text"], textarea {
             width: 100%;
-            background-color: #0f172a;
-            border: 1px solid #475569;
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
             border-radius: 10px;
             padding: 12px 15px;
-            color: #ffffff;
+            color: #1e293b;
             font-size: 1rem;
             margin-bottom: 15px;
             resize: none;
@@ -102,6 +105,7 @@
         input[type="text"]:focus, textarea:focus {
             outline: none;
             border-color: #6366f1;
+            background-color: #ffffff;
         }
         .action-btn {
             width: 100%;
@@ -113,6 +117,7 @@
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
+            transition: 0.2s;
         }
         .action-btn:hover {
             background-color: #4f46e5;
@@ -132,13 +137,14 @@
             background-color: #059669;
         }
         .result-box {
-            background-color: #0f172a;
-            border: 1px solid #334155;
+            background-color: #f1f5f9;
+            border: 1px solid #cbd5e1;
             border-radius: 10px;
             padding: 15px;
             margin-top: 20px;
             display: none;
             line-height: 1.6;
+            color: #1e293b;
         }
         .section-view {
             display: none;
@@ -147,12 +153,13 @@
             display: block;
         }
         .notice-item {
-            background: #0f172a;
+            background: #f8fafc;
             padding: 12px 15px;
             border-radius: 8px;
             margin-bottom: 10px;
-            border-left: 4px solid #38bdf8;
+            border-left: 4px solid #0284c7;
             font-size: 0.95rem;
+            border: 1px solid #e2e8f0;
         }
     </style>
 </head>
@@ -214,7 +221,6 @@
             element.classList.add('active');
         }
 
-        // আপনার ছবির প্রশ্নগুলোর সঠিক ও গোছানো উত্তরের ডাটাবেস
         const smartAnswers = {
             "স্প্রেডশিট": "স্প্রেডশিট হলো এক ধরনের কম্পিউটার প্রোগ্রাম বা সফটওয়্যার (যেমন মাইক্রোসফট এক্সেল), যা দিয়ে খুব সহজে হিসাব-নিকাশ, ডেটা এন্ট্রি, বাজেট তৈরি এবং গ্রাফ বা চার্ট তৈরি করা যায়।",
             "সংকেত": "কোনো তথ্য বা বার্তা সহজে বা দূরদূরান্তে প্রেরণের জন্য পূর্বনির্ধারিত কোনো চিহ্ন, কোড বা মাধ্যম ব্যবহার করাকে সংকেত বলে।",
@@ -233,7 +239,7 @@
             let resultBox = document.getElementById("qaResult");
 
             if (query === "") {
-                resultBox.innerHTML = "<span style='color: #f87171;'>অনুগ্রহ করে বক্সে কিছু লিখুন।</span>";
+                resultBox.innerHTML = "<span style='color: #ef4444;'>অনুগ্রহ করে বক্সে কিছু লিখুন।</span>";
                 resultBox.style.display = "block";
                 return;
             }
@@ -272,7 +278,7 @@
             let resultBox = document.getElementById("evalResult");
 
             if (text === "") {
-                resultBox.innerHTML = "<span style='color: #f87171;'>মূল্যায়নের জন্য কিছু লিখুন।</span>";
+                resultBox.innerHTML = "<span style='color: #ef4444;'>মূল্যায়নের জন্য কিছু লিখুন।</span>";
                 resultBox.style.display = "block";
                 return;
             }
@@ -284,7 +290,7 @@
 
 </body>
 </html>
+            
+            
 
-                        
-
-    
+        
