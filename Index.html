@@ -44,7 +44,14 @@
     </header>
 
     <!-- Custom Feature Navigation Bar -->
-    <div class="nav-tabs">
+    <div class="nav-tabs"><div class="nav-tabs">
+    <button onclick="openTab('planner', this)" class="active">🎯 ১. এআই স্টাডি প্ল্যানার</button>
+    <button onclick="openTab('quiz_gen', this)">⚡ ২. ইনস্ট্যান্ট কুইজ জেনারেটর</button>
+    <button onclick="openTab('summarizer', this)">📚 ৩. স্মার্ট নোট মেকার</button>
+    <button onclick="openTab('analytics', this)">📊 ৪. স্কিল ও পারফর্মেন্স</button>
+    <button onclick="openTab('leaderboard', this)">🏆 ৫. স্টুডেন্ট লিডারবোর্ড</button>
+    </div>
+        
     </div>
 
     <!-- Main Content Container --><button onclick="openTab('study_planner')">🎯 ১. এআই স্টাডি প্ল্যানার</button>
@@ -53,7 +60,40 @@
 <button onclick="openTab('analytics')">📊 ৪. স্কিল ও পারফর্মেন্স</button>
 <button onclick="openTab('leaderboard')">🏆 ৫. স্টুডেন্ট লিডারবোর্ড</button>
     
-    <div class="container">
+    <div class="container"><div class="container">
+
+    <!-- TAB 1 -->
+    <div id="planner" class="tab-content active">
+        <h2>🎯 এআই স্টাডি প্ল্যানার</h2>
+        <p>এখানে স্টাডি প্ল্যানারের কন্টেন্ট থাকবে...</p>
+    </div>
+
+    <!-- TAB 2 -->
+    <div id="quiz_gen" class="tab-content">
+        <h2>⚡ ইনস্ট্যান্ট কুইজ জেনারেটর</h2>
+        <p>এখানে কুইজ জেনারেটরের কন্টেন্ট থাকবে...</p>
+    </div>
+
+    <!-- TAB 3 -->
+    <div id="summarizer" class="tab-content">
+        <h2>📚 স্মার্ট নোট মেকার</h2>
+        <p>এখানে নোট মেকারের কন্টেন্ট থাকবে...</p>
+    </div>
+
+    <!-- TAB 4 -->
+    <div id="analytics" class="tab-content">
+        <h2>📊 স্কিল ও পারফর্মেন্স</h2>
+        <p>এখানে পারফর্মেন্স অ্যানালিটিক্স থাকবে...</p>
+    </div>
+
+    <!-- TAB 5 -->
+    <div id="leaderboard" class="tab-content">
+        <h2>🏆 স্টুডেন্ট লিডারবোর্ড</h2>
+        <p>এখানে লিডারবোর্ডের তথ্য থাকবে...</p>
+    </div>
+
+    </div>
+        
 
         <!-- TAB 1: AI Exam Paper Analyzer -->
         <div id="exam" class="tab-content active">
