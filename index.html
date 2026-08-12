@@ -202,18 +202,18 @@
             </div>
         </div>
 
-        <!-- TAB 1: Q&A Solver (Real AI) -->
+        <!-- TAB 1: Q&A Solver (Free AI) -->
         <div id="qa" class="tab-content">
-            <h2>❓ এআই প্রশ্ন ও সমাধান (রিয়েল-টাইম)</h2>
-            <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন (এআই সরাসরি উত্তর দেবে):</p>
-            <textarea id="questionInput" rows="3" placeholder="যেমন: সালোকসংশ্লেষণ কাকে বলে? বা বাংলাদেশের রাজধানী কোথায়?"></textarea>
+            <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
+            <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
+            <textarea id="questionInput" rows="3" placeholder="যেমন: বাংলাদেশের জেলা কয়টি? বা সালোকসংশ্লেষণ কাকে বলে?"></textarea>
             <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
             <div class="result-box" id="qaResult">এখানে এআই থেকে প্রশ্নের উত্তর দেখানো হবে...</div>
         </div>
 
-        <!-- TAB 2: Answer Evaluator (Real AI) -->
+        <!-- TAB 2: Answer Evaluator (Free AI) -->
         <div id="evaluator" class="tab-content">
-            <h2>📝 উত্তর মূল্যায়ন ও মার্কিং (রিয়েল এআই)</h2>
+            <h2>📝 উত্তর মূল্যায়ন ও মার্কিং</h2>
             <p class="subtitle">পরীক্ষার প্রশ্ন এবং আপনার উত্তর দিন, এআই পরীক্ষা করে পয়েন্ট ও ফিডব্যাক দেবে:</p>
             <input type="text" id="examQuestion" placeholder="পরীক্ষার প্রশ্নটি লিখুন...">
             <textarea id="userAnswer" rows="4" placeholder="আপনার লেখা উত্তরটি এখানে লিখুন..."></textarea>
@@ -263,7 +263,7 @@
 
     </div>
 
-    <!-- JavaScript Real AI Integration Logic -->
+    <!-- JavaScript Stable Free AI Logic -->
     <script>
         function openTab(tabId, element) {
             var contents = document.getElementsByClassName("tab-content");
@@ -278,7 +278,32 @@
             element.classList.add("active");
         }
 
-        // 1. Real AI Q&A Solver Logic
+        // Helper function for Free AI API Call
+        async function fetchAIResponse(userPrompt) {
+            var apiUrl = "https://text.pollinations.ai/";
+            var options = {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    messages: [
+                        { role: "system", content: "You are a helpful educational assistant for Bangladeshi school students. Answer clearly and accurately in Bengali language." },
+                        { role: "user", content: userPrompt }
+                    ],
+                    model: "openai"
+                })
+            };
+
+            var res = await fetch(apiUrl, options);
+            if (!res.ok) {
+                // Fallback direct GET request if POST fails
+                var fallbackRes = await fetch("https://text.pollinations.ai/" + encodeURIComponent(userPrompt) + "?model=openai&json=false");
+                return await fallbackRes.text();
+            }
+            var data = await res.text();
+            return data;
+        }
+
+        // 1. Q&A Solver Logic
         async function solveQuestion() {
             var q = document.getElementById("questionInput").value.trim();
             var btn = document.getElementById("qaBtn");
@@ -290,24 +315,20 @@
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-spinner">⏳ এআই চিন্তা করছে ও উত্তর তৈরি করছে... অনুগ্রহ করে কয়েক সেকেন্ড অপেক্ষা করুন।</span>`;
+            resultBox.innerHTML = `<span class="loading-spinner">⏳ উত্তর খোঁজা হচ্ছে... ২-৩ সেকেন্ড অপেক্ষা করুন।</span>`;
 
             try {
-                var prompt = encodeURIComponent("You are an educational AI tutor. Answer this question clearly in Bengali: " + q);
-                var response = await fetch("https://text.pollinations.ai/" + prompt);
-                var answerText = await response.text();
-
-                // Format response
+                var answerText = await fetchAIResponse("উত্তরটি বাংলায় পয়েন্ট আকারে সংক্ষেপে দাও: " + q);
                 var formattedAnswer = answerText.replace(/\n/g, "<br>");
                 resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>এআই উত্তর:</strong><br>${formattedAnswer}`;
             } catch (error) {
-                resultBox.innerHTML = `❌ উত্তর পেতে সমস্যা হয়েছে। অনুগ্রহ করে ইন্টারনেট কানেকশন চেক করে আবার চেষ্টা করুন।`;
+                resultBox.innerHTML = `❌ উত্তর পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।`;
             } finally {
                 btn.disabled = false;
             }
         }
 
-        // 2. Real AI Answer Evaluator Logic
+        // 2. Answer Evaluator Logic
         async function evaluateAnswer() {
             var q = document.getElementById("examQuestion").value.trim();
             var ans = document.getElementById("userAnswer").value.trim();
@@ -320,17 +341,13 @@
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-spinner">⏳ এআই আপনার উত্তরটি নিখুঁতভাবে মূল্যায়ন করছে... অপেক্ষা করুন।</span>`;
+            resultBox.innerHTML = `<span class="loading-spinner">⏳ উত্তর মূল্যায়ন করা হচ্ছে... অপেক্ষা করুন।</span>`;
 
             try {
-                var promptText = "You are a school teacher evaluating a student answer in Bengali.\nQuestion: " + q + "\nStudent Answer: " + ans + "\nEvaluate the answer. Give a score out of 10, explain if it is correct or incorrect, and provide tips to improve it. Write everything in Bengali language.";
-                var prompt = encodeURIComponent(promptText);
-
-                var response = await fetch("https://text.pollinations.ai/" + prompt);
-                var evalText = await response.text();
-
+                var promptText = "তুমি একজন শিক্ষক। প্রশ্ন: " + q + "। শিক্ষার্থীর উত্তর: " + ans + "। এটি মূল্যায়ন করে ১০ নম্বরের মধ্যে কত পাবে বলো এবং কেমন হয়েছে ও কীভাবে আরও ভালো লেখা যায় তা বাংলায় সুন্দর করে বুঝিয়ে বলো।";
+                var evalText = await fetchAIResponse(promptText);
                 var formattedEval = evalText.replace(/\n/g, "<br>");
-                resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${formattedEval}`;
+                resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও ফিডব্যাক:</strong><br><br>${formattedEval}`;
             } catch (error) {
                 resultBox.innerHTML = `❌ মূল্যায়ন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।`;
             } finally {
@@ -369,4 +386,4 @@
 </body>
 </html>
 
-                    
+                 
