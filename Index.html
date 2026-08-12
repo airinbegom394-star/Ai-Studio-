@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fire Fly - AI School Portal</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #0f172a; color: #f8fafc; display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Top Navigation Bar */
+        header { background: #1e293b; padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 20px; font-weight: bold; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+        
+        /* Dashboard Tabs */
+        .nav-tabs { display: flex; gap: 10px; background: #1e293b; padding: 10px 20px; overflow-x: auto; border-bottom: 1px solid #334155; }
+        .tab-btn { background: #334155; color: #94a3b8; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; white-space: nowrap; transition: 0.3s; }
+        .tab-btn.active, .tab-btn:hover { background: #6366f1; color: white; }
+
+        /* Main Container */
+        .container { max-width: 600px; margin: 30px auto; width: 90%; background: #1e293b; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h2 { color: #f8fafc; font-size: 22px; margin-bottom: 8px; text-align: center; }
+        p.subtitle { color: #94a3b8; font-size: 13px; text-align: center; margin-bottom: 20px; }
+
+        /* Form Inputs */
+        textarea, input, select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; margin-bottom: 15px; font-size: 14px; }
+        button.action-btn { width: 100%; background: #6366f1; color: white; border: none; padding: 12px; font-size: 16px; font-weight: bold; border-radius: 8px; cursor: pointer; }
+        button.action-btn:hover { background: #4f46e5; }
+
+        /* Result Box */
+        .result-box { margin-top: 20px; padding: 15px; background: #0f172a; border-left: 4px solid #6366f1; border-radius: 8px; font-size: 14px; display: none; line-height: 1.6; }
+        
+        /* Content Tabs */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Bar -->
+    <header>
+        <div class="logo">🔥 Fire Fly <span style="font-size: 12px; color: #94a3b8;">(AI Ecosystem)</span></div>
+        <div style="font-size: 13px; color: #cbd5e1;">👤 Student Portal</div>
+    </header>
+
+    <!-- Custom Feature Navigation Bar -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="openTab('exam')">📝 ১. খাতা এনালাইজার</button>
+        <button class="tab-btn" onclick="openTab('feedback')">📩 ২. কমপ্লেন ও ফিডব্যাক</button>
+        <button class="tab-btn" onclick="openTab('teacher')">👨‍🏫 ৩. টিচার ট্র্যাকার</button>
+        <button class="tab-btn" onclick="openTab('bot')">🤖 ৪. স্কুল ইনফো বট</button>
+        <button class="tab-btn" onclick="openTab('events')">📅 ৫. ইভেন্টস ও নোটিশ</button>
+    </div>
+
+    <!-- Main Content Container -->
+    <div class="container">
+
+        <!-- TAB 1: AI Exam Paper Analyzer -->
+        <div id="exam" class="tab-content active">
+            <h2>এআই পরীক্ষার খাতা বিশ্লেষক 🎓</h2>
+            <p class="subtitle">আপনার প্রশ্ন ও উত্তর নিচে টাইপ করে জাজমেন্ট নিন</p>
+            <textarea id="exam-input" placeholder="প্রশ্ন ও আপনার উত্তর এখানে লিখুন..."></textarea>
+            <button class="action-btn" onclick="analyzeExam()">খাতা মূল্যায়ন করুন</button>
+            <div id="exam-res" class="result-box"></div>
+        </div>
+
+        <!-- TAB 2: Paperless School Feedback & Complaint -->
+        <div id="feedback" class="tab-content">
+            <h2>ডিজিটাল ফিডব্যাক ও কমপ্লেন বক্স 📩</h2>
+            <p class="subtitle">স্কুলের যেকোনো সমস্যা বা মতামত গোপন রেখে জমা দিন</p>
+            <select>
+                <option>মতামতের ধরন বেছে নিন...</option>
+                <option>অভিযোগ (Complaint)</option>
+                <option>পরামর্শ (Suggestion)</option>
+                <option>প্রশংসা (Feedback)</option>
+            </select>
+            <textarea placeholder="আপনার মেসেজ বিস্তারিত লিখুন..."></textarea>
+            <button class="action-btn" onclick="showResult('feed-res', 'আপনার ফিডব্যাক সফলভাবে কর্তৃপক্ষের কাছে পাঠানো হয়েছে। ধন্যবাদ!')">জমা দিন</button>
+            <div id="feed-res" class="result-box"></div>
+        </div>
+
+        <!-- TAB 3: Smart Teacher Availability Tracker -->
+        <div id="teacher" class="tab-content">
+            <h2>স্মার্ট টিচার ট্র্যাকার 👨‍🏫</h2>
+            <p class="subtitle">শিক্ষকরা এখন ফ্রি আছেন কি না তা দেখুন</p>
+            <div style="background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                <b>রহিম স্যার (গণিত):</b> <span style="color: #4ade80;">উপলব্ধ আছেন (টিচার্স রুম)</span>
+            </div>
+            <div style="background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 15px;">
+                <b>কাজী স্যার (ইংরেজি):</b> <span style="color: #f87171;">ক্লাসে আছেন (ক্লাস ৯-এ)</span>
+            </div>
+        </div>
+
+        <!-- TAB 4: AI School Info Assistant -->
+        <div id="bot" class="tab-content">
+            <h2>স্কুল ইনফো বট 🤖</h2>
+            <p class="subtitle">স্কুলের ছুটি, রুটিন বা ফি সংক্রান্ত যেকোনো প্রশ্ন করুন</p>
+            <input type="text" id="bot-q" placeholder="যেমন: আগামীকালের ক্লাস রুটিন কি?">
+            <button class="action-btn" onclick="runInfoBot()">জিজ্ঞাসা করুন</button>
+            <div id="bot-res" class="result-box"></div>
+        </div>
+
+        <!-- TAB 5: Events & Notice -->
+        <div id="events" class="tab-content">
+            <h2>ইভেন্টস ও নোটিশ বোর্ড 📅</h2>
+            <p class="subtitle">স্কুলের সাম্প্রতিক সকল আপডেট ও অনুষ্ঠানসূচী</p>
+            <div style="background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+                <b>📢 বার্ষিক ক্রীড়া প্রতিযোগিতা:</b> আগামী ২৫শে আগস্ট অনুষ্ঠিত হবে।
+            </div>
+            <div style="background: #0f172a; padding: 12px; border-radius: 8px;">
+                <b>📢 অভিভাবক সমাবেশ:</b> আগামী শুক্রবার সকাল ১০টায়।
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Tab switching logic
+        function openTab(tabName) {
+            var i, content, tabs;
+            content = document.getElementsByClassName("tab-content");
+            for (i = 0; i < content.length; i++) {
+                content[i].classList.remove("active");
+            }
+            tabs = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            event.currentTarget.classList.add("active");
+        }
+
+        // Generic feedback submission response
+        function showResult(id, text) {
+            var res = document.getElementById(id);
+            res.style.display = "block";
+            res.innerHTML = text;
+        }
+
+        // Exam Evaluation Response
+        function analyzeExam() {
+            var text = document.getElementById('exam-input').value;
+            var res = document.getElementById('exam-res');
+            if(text.trim() === "") return alert("অনুগ্রহ করে কোনো উত্তর লিখুন!");
+            
+            res.style.display = "block";
+            res.innerHTML = "<b>Fire Fly AI মূল্যায়ন:</b><br>প্রাপ্ত নম্বর: <b>৮/১০</b><br>মন্তব্য: উত্তর সুন্দর হয়েছে। বাক্য গঠনে আরেকটু মনোযোগ দিলে পূর্ণ নম্বর পাওয়া সম্ভব।";
+        }
+
+        // Info Bot Logic
+        function runInfoBot() {
+            var q = document.getElementById('bot-q').value;
+            var res = document.getElementById('bot-res');
+            if(q.trim() === "") return alert("একটি প্রশ্ন লিখুন!");
+            
+            res.style.display = "block";
+            res.innerHTML = "<b>Fire Fly Bot:</b> আপনার প্রশ্নটি জমা রাখা হয়েছে। আপনার স্কুলের নোটিশ বোর্ড চেক করুন অথবা শিক্ষকের সাহায্য নিন।";
+        }
+    </script>
+
+</body>
+                                           </html>
+                                           
