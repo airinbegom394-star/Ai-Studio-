@@ -131,14 +131,6 @@
             word-wrap: break-word;
         }
 
-        .api-card {
-            background-color: #1e1b4b;
-            border: 1px solid #6366f1;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
         .notice-card {
             background-color: #0f172a;
             border-left: 4px solid #38bdf8;
@@ -175,16 +167,6 @@
 
     <div class="container">
 
-        <!-- API KEY SETTING CARD -->
-        <div class="api-card">
-            <h3 style="color: #a855f7; font-size: 16px;">🔑 এআই সেটআপ (Gemini Key)</h3>
-            <p style="font-size: 12px; color: #cbd5e1; margin-top: 5px;">
-                আপনার Gemini API Key-টি নিচে দিয়ে "সেভ করুন" বাটনে চাপ দিন:
-            </p>
-            <input type="password" id="geminiApiKey" placeholder="API Key এখানে পেস্ট করুন...">
-            <button class="action-btn" style="background-color: #a855f7; padding: 8px;" onclick="saveApiKey()">সেভ করুন 💾</button>
-        </div>
-
         <!-- TAB 0: Home -->
         <div id="home" class="tab-content active">
             <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
@@ -195,16 +177,16 @@
             <div class="result-box">🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের তথ্য।</div>
         </div>
 
-        <!-- TAB 1: Gemini AI Q&A -->
+        <!-- TAB 1: AI Q&A -->
         <div id="qa" class="tab-content">
             <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
             <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
-            <textarea id="questionInput" rows="3" placeholder="যেমন: বাংলাদেশের জেলা কয়টি? বা সালোকসংশ্লেষণ কাকে বলে?"></textarea>
+            <textarea id="questionInput" rows="3" placeholder="যেমন: বিজ্ঞান কাকে বলে? বা বাংলাদেশের জেলা কয়টি?"></textarea>
             <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
             <div class="result-box" id="qaResult">এখানে সঠিক উত্তর দেখানো হবে...</div>
         </div>
 
-        <!-- TAB 2: Gemini AI Evaluator -->
+        <!-- TAB 2: AI Evaluator -->
         <div id="evaluator" class="tab-content">
             <h2>📝 উত্তর মূল্যায়ন ও মার্কিং</h2>
             <p class="subtitle">পরীক্ষার প্রশ্ন ও আপনার লেখা উত্তর দিন:</p>
@@ -245,24 +227,6 @@
     </div>
 
     <script>
-        // Load API Key on Page Load
-        window.onload = function() {
-            var savedKey = localStorage.getItem("gemini_api_key");
-            if (savedKey) {
-                document.getElementById("geminiApiKey").value = savedKey;
-            }
-        };
-
-        function saveApiKey() {
-            var key = document.getElementById("geminiApiKey").value.trim();
-            if(!key) {
-                alert("API Key দিন!");
-                return;
-            }
-            localStorage.setItem("gemini_api_key", key);
-            alert("API Key সফলভাবে সেভ হয়েছে!");
-        }
-
         function openTab(tabId, element) {
             var contents = document.getElementsByClassName("tab-content");
             for (var i = 0; i < contents.length; i++) contents[i].classList.remove("active");
@@ -272,34 +236,16 @@
             element.classList.add("active");
         }
 
-        // Gemini API Call
-        async function callGeminiAI(prompt) {
-            var apiKey = localStorage.getItem("gemini_api_key") || document.getElementById("geminiApiKey").value.trim();
-            
-            if (!apiKey) {
-                return "⚠️ অনুগ্রহ করে উপরের '🔑 এআই সেটআপ' বক্সে আপনার Gemini API Key দিয়ে সেভ করুন।";
-            }
-
-            var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
-
+        // Direct AI Query
+        async function fetchAIResponse(promptText) {
             try {
-                var response = await fetch(url, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }]
-                    })
-                });
-
-                var data = await response.json();
-
-                if (data.error) {
-                    return "❌ API Key কাজ করছে না। অনুগ্রহ করে সঠিক Key দিয়ে আবার চেষ্টা করুন।";
-                }
-
-                return data.candidates[0].content.parts[0].text;
+                var url = "https://text.pollinations.ai/" + encodeURIComponent(promptText) + "?model=openai&system=" + encodeURIComponent("You are an expert tutor. Answer clearly and correctly in Bengali language.");
+                var response = await fetch(url);
+                if (!response.ok) throw new Error("API error");
+                var data = await response.text();
+                return data;
             } catch (err) {
-                return "❌ নেটওয়ার্ক এরর! ইন্টারনেট কানেকশন চেক করুন।";
+                return "সার্ভারে সমস্যা হচ্ছে। অনুগ্রহ করে একটু পর আবার চেষ্টা করুন।";
             }
         }
 
@@ -315,12 +261,11 @@
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-text">⏳ চিন্তা করা হচ্ছে... উত্তর তৈরি হচ্ছে।</span>`;
+            resultBox.innerHTML = `<span class="loading-text">⏳ উত্তর তৈরি হচ্ছে, অপেক্ষা করুন...</span>`;
 
-            var promptMsg = "You are an educational tutor. Answer clearly and accurately in Bengali language: " + q;
-            var answerText = await callGeminiAI(promptMsg);
-
+            var answerText = await fetchAIResponse(q);
             var formattedAnswer = answerText.replace(/\n/g, "<br>");
+
             resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>উত্তর:</strong><br>${formattedAnswer}`;
             btn.disabled = false;
         }
@@ -340,10 +285,10 @@
             btn.disabled = true;
             resultBox.innerHTML = `<span class="loading-text">⏳ উত্তর মূল্যায়ন করা হচ্ছে...</span>`;
 
-            var promptMsg = `You are a school teacher in Bangladesh. Question: ${q}. Student Answer: ${ans}. Evaluate out of 10 and give detailed Bengali feedback.`;
-            var evalText = await callGeminiAI(promptMsg);
-
+            var promptMsg = "Question: " + q + "\nStudent Answer: " + ans + "\nPlease evaluate out of 10 and give detailed Bengali feedback.";
+            var evalText = await fetchAIResponse(promptMsg);
             var formattedEval = evalText.replace(/\n/g, "<br>");
+
             resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${formattedEval}`;
             btn.disabled = false;
         }
@@ -369,5 +314,6 @@
         }
     </script>
 </body>
-    </html>
-    
+</html>
+        
+        
