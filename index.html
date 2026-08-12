@@ -51,7 +51,6 @@
             cursor: pointer;
             font-size: 14px;
             white-space: nowrap;
-            transition: all 0.2s;
         }
 
         .tab-btn.active {
@@ -99,11 +98,6 @@
             color: #ffffff;
             border-radius: 6px;
             font-size: 14px;
-            outline: none;
-        }
-
-        textarea:focus, input:focus {
-            border-color: #38bdf8;
         }
 
         button.action-btn {
@@ -116,7 +110,6 @@
             cursor: pointer;
             font-size: 15px;
             font-weight: bold;
-            transition: 0.2s;
         }
 
         button.action-btn:hover {
@@ -136,6 +129,14 @@
             border-radius: 8px;
             line-height: 1.6;
             word-wrap: break-word;
+        }
+
+        .api-card {
+            background-color: #1e1b4b;
+            border: 1px solid #6366f1;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
         }
 
         .notice-card {
@@ -161,7 +162,7 @@
 
     <header>
         <div class="logo">🔥 Ai Universe</div>
-        <div style="font-size: 13px; color: #cbd5e1;">👤 School Portal</div>
+        <div style="font-size: 13px; color: #cbd5e1;">👤 Student Portal</div>
     </header>
 
     <div class="nav-tabs">
@@ -174,26 +175,36 @@
 
     <div class="container">
 
+        <!-- API KEY SETTING CARD -->
+        <div class="api-card">
+            <h3 style="color: #a855f7; font-size: 16px;">🔑 এআই সেটআপ (Gemini Key)</h3>
+            <p style="font-size: 12px; color: #cbd5e1; margin-top: 5px;">
+                আপনার Gemini API Key-টি নিচে দিয়ে "সেভ করুন" বাটনে চাপ দিন:
+            </p>
+            <input type="password" id="geminiApiKey" placeholder="API Key এখানে পেস্ট করুন...">
+            <button class="action-btn" style="background-color: #a855f7; padding: 8px;" onclick="saveApiKey()">সেভ করুন 💾</button>
+        </div>
+
         <!-- TAB 0: Home -->
         <div id="home" class="tab-content active">
             <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
             <p class="subtitle">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম:</p>
             <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সাথে সাথে সঠিক উত্তর জানুন।</div>
             <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখা উত্তর পরীক্ষা করে ফিডব্যাক পান।</div>
-            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ জরুরি নোটিশ দেখুন।</div>
-            <div class="result-box">🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের প্রয়োজনীয় তথ্য।</div>
+            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ নোটিশ দেখুন।</div>
+            <div class="result-box">🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের তথ্য।</div>
         </div>
 
-        <!-- TAB 1: Direct AI Q&A (No Popup, No Login) -->
+        <!-- TAB 1: Gemini AI Q&A -->
         <div id="qa" class="tab-content">
-            <h2>❓ এআই প্রশ্ন ও সমাধান (স্মার্ট ভার্সন)</h2>
+            <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
             <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
             <textarea id="questionInput" rows="3" placeholder="যেমন: বাংলাদেশের জেলা কয়টি? বা সালোকসংশ্লেষণ কাকে বলে?"></textarea>
             <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
             <div class="result-box" id="qaResult">এখানে সঠিক উত্তর দেখানো হবে...</div>
         </div>
 
-        <!-- TAB 2: Direct AI Evaluator (No Popup, No Login) -->
+        <!-- TAB 2: Gemini AI Evaluator -->
         <div id="evaluator" class="tab-content">
             <h2>📝 উত্তর মূল্যায়ন ও মার্কিং</h2>
             <p class="subtitle">পরীক্ষার প্রশ্ন ও আপনার লেখা উত্তর দিন:</p>
@@ -233,8 +244,25 @@
 
     </div>
 
-    <!-- Direct Background Fetch Logic (No Sign in / No Popups) -->
     <script>
+        // Load API Key on Page Load
+        window.onload = function() {
+            var savedKey = localStorage.getItem("gemini_api_key");
+            if (savedKey) {
+                document.getElementById("geminiApiKey").value = savedKey;
+            }
+        };
+
+        function saveApiKey() {
+            var key = document.getElementById("geminiApiKey").value.trim();
+            if(!key) {
+                alert("API Key দিন!");
+                return;
+            }
+            localStorage.setItem("gemini_api_key", key);
+            alert("API Key সফলভাবে সেভ হয়েছে!");
+        }
+
         function openTab(tabId, element) {
             var contents = document.getElementsByClassName("tab-content");
             for (var i = 0; i < contents.length; i++) contents[i].classList.remove("active");
@@ -244,48 +272,60 @@
             element.classList.add("active");
         }
 
-        // Direct AI Call Function
-        async function fetchAIResponseDirect(promptText) {
+        // Gemini API Call
+        async function callGeminiAI(prompt) {
+            var apiKey = localStorage.getItem("gemini_api_key") || document.getElementById("geminiApiKey").value.trim();
+            
+            if (!apiKey) {
+                return "⚠️ অনুগ্রহ করে উপরের '🔑 এআই সেটআপ' বক্সে আপনার Gemini API Key দিয়ে সেভ করুন।";
+            }
+
+            var url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey;
+
             try {
-                var query = encodeURIComponent("Answer in clear Bengali language: " + promptText);
-                var response = await fetch("https://text.pollinations.ai/" + query + "?model=mistral");
-                
-                if (!response.ok) throw new Error("Network error");
-                
-                var text = await response.text();
-                
-                // If backend returns API error json, fallback nicely
-                if (text.includes('"error"')) {
-                    return "উত্তরটি প্রস্তুত করা যাচ্ছে না। অনুগ্রহ করে প্রশ্নটি পরিষ্কার করে আবার চেষ্টা করুন।";
+                var response = await fetch(url, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        contents: [{ parts: [{ text: prompt }] }]
+                    })
+                });
+
+                var data = await response.json();
+
+                if (data.error) {
+                    return "❌ API Key কাজ করছে না। অনুগ্রহ করে সঠিক Key দিয়ে আবার চেষ্টা করুন।";
                 }
-                return text;
+
+                return data.candidates[0].content.parts[0].text;
             } catch (err) {
-                return "সংযোগ বিচ্ছিন্ন হয়েছে। অনুগ্রহ করে ইন্টারনেট চেক করে আবার চেষ্টা করুন।";
+                return "❌ নেটওয়ার্ক এরর! ইন্টারনেট কানেকশন চেক করুন।";
             }
         }
 
-        // 1. Solve Question
+        // 1. Question Solver
         async function solveQuestion() {
             var q = document.getElementById("questionInput").value.trim();
             var btn = document.getElementById("qaBtn");
             var resultBox = document.getElementById("qaResult");
 
             if (!q) {
-                alert("অনুগ্রহ করে একটি প্রশ্ন লিখুন!");
+                alert("একটি প্রশ্ন লিখুন!");
                 return;
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-text">⏳ চিন্তা করা হচ্ছে... উত্তর তৈরি হচ্ছে, অপেক্ষা করুন।</span>`;
+            resultBox.innerHTML = `<span class="loading-text">⏳ চিন্তা করা হচ্ছে... উত্তর তৈরি হচ্ছে।</span>`;
 
-            var answerText = await fetchAIResponseDirect(q);
+            var promptMsg = "You are an educational tutor. Answer clearly and accurately in Bengali language: " + q;
+            var answerText = await callGeminiAI(promptMsg);
+
             var formattedAnswer = answerText.replace(/\n/g, "<br>");
-
             resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>উত্তর:</strong><br>${formattedAnswer}`;
             btn.disabled = false;
         }
 
-        // 2. Evaluate Answer
+        // 2. Answer Evaluator
         async function evaluateAnswer() {
             var q = document.getElementById("examQuestion").value.trim();
             var ans = document.getElementById("userAnswer").value.trim();
@@ -300,15 +340,15 @@
             btn.disabled = true;
             resultBox.innerHTML = `<span class="loading-text">⏳ উত্তর মূল্যায়ন করা হচ্ছে...</span>`;
 
-            var promptMsg = "You are a school teacher in Bangladesh. Question: " + q + ". Student answer: " + ans + ". Evaluate this answer out of 10 and give detailed helpful Bengali feedback.";
-            var evalText = await fetchAIResponseDirect(promptMsg);
-            var formattedEval = evalText.replace(/\n/g, "<br>");
+            var promptMsg = `You are a school teacher in Bangladesh. Question: ${q}. Student Answer: ${ans}. Evaluate out of 10 and give detailed Bengali feedback.`;
+            var evalText = await callGeminiAI(promptMsg);
 
+            var formattedEval = evalText.replace(/\n/g, "<br>");
             resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${formattedEval}`;
             btn.disabled = false;
         }
 
-        // 3. Notice Board Logic
+        // 3. Notice Board
         function addNotice() {
             var title = document.getElementById("noticeTitle").value.trim();
             var body = document.getElementById("noticeBody").value.trim();
@@ -329,7 +369,5 @@
         }
     </script>
 </body>
-</html>
-                     }
-                    
-                
+    </html>
+    
