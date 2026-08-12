@@ -1,36 +1,208 @@
-<script>
-  async function askAI() {
-    const question = document.getElementById('userQuestion').value;
-    const outputDiv = document.getElementById('aiOutput');
-    
-    if (!question) {
-      outputDiv.innerText = "দয়া করে একটি প্রশ্ন লিখুন।";
-      return;
-    }
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai Universe - Student Portal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #0b1120;
+            color: #ffffff;
+            padding-bottom: 50px;
+        }
+        /* Header / Navbar */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #0f172a;
+            border-bottom: 1px solid #1e293b;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+        .logo span {
+            color: #f97316;
+            margin-right: 5px;
+            font-size: 1.4rem;
+        }
+        .portal-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .portal-btn:hover {
+            color: #38bdf8;
+        }
 
-    outputDiv.innerText = "এআই উত্তর খুঁজছে, একটু অপেক্ষা করুন...";
+        /* Sub Navigation Menu */
+        .sub-nav {
+            display: flex;
+            gap: 10px;
+            padding: 15px 20px;
+            overflow-x: auto;
+            background-color: #0f172a;
+            white-space: nowrap;
+        }
+        .sub-nav::-webkit-scrollbar {
+            display: none;
+        }
+        .nav-item {
+            background-color: #1e293b;
+            color: #cbd5e1;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.3s;
+        }
+        .nav-item.active {
+            background-color: #6366f1;
+            color: #ffffff;
+            font-weight: 500;
+        }
+        .nav-item:hover {
+            background-color: #334155;
+        }
 
-    const apiKey = "আপনার_গেমিনি_এপিআই_কি_এখানে_দিন"; // এখানে আপনার ফ্রি Gemini API Key বসাবেন
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+        /* Main Content Container */
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
 
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: question }] }]
-        })
-      });
+        .card-title {
+            color: #38bdf8;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .card-desc {
+            color: #94a3b8;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
 
-      const data = await response.json();
-      const aiReply = data.candidates[0].content.parts[0].text;
-      outputDiv.innerText = aiReply;
-    } catch (error) {
-      outputDiv.innerText = "দুঃখিত, উত্তর আনতে সমস্যা হয়েছে। আবার চেষ্টা করুন।";
-    }
-  }
-</script>
-                    
+        /* Form Elements */
+        textarea, input[type="text"] {
+            width: 100%;
+            background-color: #0f172a;
+            border: 1px solid #475569;
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #ffffff;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            resize: none;
+        }
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #6366f1;
+        }
 
-        
-            
+        .action-btn {
+            width: 100%;
+            background-color: #6366f1;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .action-btn:hover {
+            background-color: #4f46e5;
+        }
+
+        /* Result Box */
+        .result-box {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        .result-title {
+            font-size: 1rem;
+            color: #f8fafc;
+            margin-bottom: 10px;
+        }
+        .result-content {
+            color: #cbd5e1;
+            font-size: 0.95ln;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">
+            <span>🔥</span> Ai Universe
+        </div>
+        <button class="portal-btn">
+            👤 Student Portal
+        </button>
+    </header>
+
+    <!-- Navigation Bar -->
+    <div class="sub-nav">
+        <a href="#" class="nav-item active">🏠 হোম</a>
+        <a href="#" class="nav-item">? ১. এআই প্রশ্নোত্তর</a>
+        <a href="#" class="nav-item">📚 ৩. স্মার্ট নোট মেকার</a>
+        <a href="#" class="nav-item">⚡ ২. কুইজ জেনারেটর</a>
+        <a href="#" class="nav-item">🏆 ৫. স্টুডেন্ট লিডারবোর্ড</a>
+    </div>
+
+    <!-- Dynamic Section / Card -->
+    <div class="container">
+        <div class="card-title">
+            🏠 স্বাগতম Ai Universe-এ!
+        </div>
+        <div class="card-desc">
+            আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম:
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="background: #0f172a; padding: 15px; border-radius: 10px; border: 1px solid #334155;">
+                <h4 style="color: #f8fafc; margin-bottom: 5px;">? এআই প্রশ্নোত্তর:</h4>
+                <p style="color: #94a3b8; font-size: 0.9rem;">যে কোনো প্রশ্ন লিখে সাথে সাথে সঠিক উত্তর জানুন।</p>
+            </div>
+            <div style="background: #0f172a; padding: 15px; border-radius: 10px; border: 1px solid #334155;">
+                <h4 style="color: #f8fafc; margin-bottom: 5px;">📊 স্কিল ও পারফরম্যান্স:</h4>
+                <p style="color: #94a3b8; font-size: 0.9rem;">আপনার পড়াশোনার সার্বিক অগ্রগতি দেখুন।</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
