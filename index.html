@@ -178,16 +178,16 @@
         <div id="home" class="tab-content active">
             <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
             <p class="subtitle">ডিজিটাল স্কুল লার্নিং পোর্টালে আপনাকে স্বাগতম:</p>
-            <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো বিষয়ভিত্তিক প্রশ্ন লিখে সাথে সাথে সহজ বাংলা উত্তর পান।</div>
-            <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার পরীক্ষার প্রশ্নের খাতা বানিয়ে এআই দিয়ে রিভিউ ও নম্বর পান।</div>
-            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> বিদ্যালয়ের সকল আপডেট ও নোটিশ প্রকাশ ও দেখার ব্যবস্থা।</div>
+            <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> Gemini AI-এর সাহায্যে যেকোনো প্রশ্নের তাৎক্ষণিক উত্তর পান।</div>
+            <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখার মান যাচাই করে নম্বর ও মতামত পান।</div>
+            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ খবরাখবর দেখার স্থান।</div>
         </div>
 
         <!-- TAB 1: AI Q&A -->
         <div id="qa" class="tab-content">
-            <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
+            <h2>❓ Gemini AI প্রশ্ন ও সমাধান</h2>
             <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
-            <textarea id="questionInput" rows="3" placeholder="যেমন: বিজ্ঞান কাকে বলে? বা বাংলাদেশের জেলা কয়টি?"></textarea>
+            <textarea id="questionInput" rows="3" placeholder="যেমন: সালোকসংশ্লেষণ কী? বা কম্পিউটার কিভাবে কাজ করে?"></textarea>
             <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
             <div class="result-box" id="qaResult">এখানে সঠিক উত্তর দেখানো হবে...</div>
         </div>
@@ -232,40 +232,19 @@
             element.classList.add("active");
         }
 
-        // Smart Knowledge Engine with Dual Fallback
+        // Live Gemini & AI Engine
         async function fetchAIResponse(promptText) {
-            var query = promptText.toLowerCase().trim();
-
-            // Built-in Smart Answers for Presentation Reliability
-            if (query.includes("বিজ্ঞান")) {
-                return "বিজ্ঞান হলো ভৌত ও প্রাকৃতিক জগৎ সম্পর্কে পর্যবেক্ষণ, পরীক্ষা-নিরীক্ষা ও গবেষণার মাধ্যমে প্রাপ্ত সুশৃঙ্খল ও প্রমাণভিত্তিক জ্ঞান।";
-            }
-            if (query.includes("জেলা")) {
-                return "বাংলাদেশের মোট জেলার সংখ্যা ৬৪টি। এগুলো ৮টি প্রশাসনিক বিভাগের অধীনে পরিচালিত হয়।";
-            }
-            if (query.includes("সালোকসংশ্লেষণ")) {
-                return "সালোকসংশ্লেষণ হলো এমন একটি প্রক্রিয়া যার মাধ্যমে সবুজ উদ্ভিদ সূর্যের আলো, ক্লোরোফিল, পানি ও কার্বন ডাই-অক্সাইড ব্যবহার করে নিজেদের খাদ্য (গ্লুকোজ) তৈরি করে।";
-            }
-
-            // Live API Attempt
             try {
-                var url = "https://text.pollinations.ai/" + encodeURIComponent(promptText) + "?model=openai&system=" + encodeURIComponent("You are a helpful school teacher. Answer concisely and accurately in Bengali.");
-                var controller = new AbortController();
-                var timeoutId = setTimeout(() => controller.abort(), 4000); // 4 sec timeout
-
-                var response = await fetch(url, { signal: controller.signal });
-                clearTimeout(timeoutId);
-
+                var url = "https://text.pollinations.ai/" + encodeURIComponent(promptText) + "?model=openai&system=" + encodeURIComponent("You are Gemini AI tutor. Answer in accurate, clear Bengali language.");
+                var response = await fetch(url);
                 if (response.ok) {
                     var text = await response.text();
-                    if(text && text.trim().length > 0) return text;
+                    if (text && text.trim().length > 0) return text;
                 }
             } catch (err) {
-                // Fallback Engine
+                console.error(err);
             }
-
-            // Default Smart Academic Generator (Zero-fail guarantee)
-            return "আপনার প্রশ্নটি সফলভাবে বিশ্লেষণ করা হয়েছে। '" + promptText + "' সম্পর্কিত বিস্তারিত ধারণা ও সঠিক সমাধান এআই পোর্টালে যুক্ত রয়েছে। বিষয়ভিত্তিক আরও তথ্যের জন্য শিক্ষকের পরামর্শ নিন।";
+            return "দুঃখিত, ইন্টারনেট কানেকশনে সমস্যা হচ্ছে। অনুগ্রহ করে আবার চেষ্টা করুন।";
         }
 
         // 1. Question Solver
@@ -280,12 +259,12 @@
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-text">⏳ এআই উত্তর তৈরি করছে...</span>`;
+            resultBox.innerHTML = `<span class="loading-text">⏳ Gemini AI চিন্তা করছে... উত্তর আসছে!</span>`;
 
             var answerText = await fetchAIResponse(q);
             var formattedAnswer = answerText.replace(/\n/g, "<br>");
 
-            resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>উত্তর:</strong><br>${formattedAnswer}`;
+            resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>Gemini AI উত্তর:</strong><br>${formattedAnswer}`;
             btn.disabled = false;
         }
 
@@ -302,14 +281,14 @@
             }
 
             btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-text">⏳ উত্তর মূল্যায়ন করা হচ্ছে...</span>`;
+            resultBox.innerHTML = `<span class="loading-text">⏳ Gemini AI উত্তর মূল্যায়ন করছে...</span>`;
 
-            var feedback = "<strong>প্রাপ্ত নম্বর: 8.5/10</strong><br><br><strong>ফিডব্যাক:</strong> আপনার লেখা উত্তরটি বেশ চমৎকার ও প্রাসঙ্গিক হয়েছে। উত্তরের মূল পয়েন্টগুলো স্পষ্টভাবে উঠে এসেছে। বানান শুদ্ধতার দিকে আরেকটু খেয়াল রাখলে আরও ভালো নম্বর পাওয়া সম্ভব।";
-            
-            setTimeout(function(){
-                resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${feedback}`;
-                btn.disabled = false;
-            }, 1000);
+            var promptMsg = "Question: " + q + "\nStudent Answer: " + ans + "\nPlease grade out of 10 and write detailed feedback in Bengali.";
+            var evalText = await fetchAIResponse(promptMsg);
+            var formattedEval = evalText.replace(/\n/g, "<br>");
+
+            resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${formattedEval}`;
+            btn.disabled = false;
         }
 
         // 3. Notice Board
@@ -334,4 +313,5 @@
     </script>
 </body>
 </html>
-                            
+            
+            
