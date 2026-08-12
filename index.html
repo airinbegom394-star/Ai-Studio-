@@ -1,159 +1,36 @@
-<!DOCTYPE html>
-<html lang="bn">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ai Universe - Student Portal</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; min-height: 100vh; }
-        header { background-color: #1e293b; padding: 15px 20px; border-bottom: 1px solid #334155; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 20px; font-weight: bold; color: #38bdf8; }
-        .nav-tabs { display: flex; gap: 10px; padding: 15px 20px; background-color: #0f172a; overflow-x: auto; border-bottom: 1px solid #1e293b; }
-        .tab-btn { background-color: #334155; color: #cbd5e1; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-size: 14px; white-space: nowrap; }
-        .tab-btn.active { background-color: #4f46e5; color: #ffffff; font-weight: bold; }
-        .container { max-width: 800px; margin: 20px auto; padding: 20px; }
-        .tab-content { display: none; background-color: #1e293b; padding: 25px; border-radius: 12px; border: 1px solid #334155; }
-        .tab-content.active { display: block; }
-        h2 { color: #38bdf8; margin-bottom: 10px; }
-        .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 15px; }
-        textarea, input { width: 100%; padding: 12px; margin-top: 10px; margin-bottom: 15px; background-color: #0f172a; border: 1px solid #334155; color: #ffffff; border-radius: 6px; font-size: 14px; outline: none; }
-        button.action-btn { width: 100%; background-color: #6366f1; color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; font-size: 15px; font-weight: bold; }
-        .result-box { margin-top: 20px; padding: 15px; background-color: #0f172a; border: 1px solid #334155; border-radius: 8px; line-height: 1.6; word-wrap: break-word; white-space: pre-wrap; }
-        .notice-card { background-color: #0f172a; border-left: 4px solid #38bdf8; padding: 12px 15px; margin-bottom: 12px; border-radius: 4px; }
-        .notice-date { font-size: 12px; color: #94a3b8; }
-        .loading-text { color: #38bdf8; font-weight: bold; }
-    </style>
-</head>
-<body>
+<script>
+  async function askAI() {
+    const question = document.getElementById('userQuestion').value;
+    const outputDiv = document.getElementById('aiOutput');
+    
+    if (!question) {
+      outputDiv.innerText = "দয়া করে একটি প্রশ্ন লিখুন।";
+      return;
+    }
 
-    <header>
-        <div class="logo">🔥 Ai Universe</div>
-        <div style="font-size: 13px; color: #cbd5e1;">👤 Student Portal</div>
-    </header>
+    outputDiv.innerText = "এআই উত্তর খুঁজছে, একটু অপেক্ষা করুন...";
 
-    <div class="nav-tabs">
-        <button onclick="openTab('home', this)" class="tab-btn active">🏠 হোম</button>
-        <button onclick="openTab('qa', this)" class="tab-btn">❓ ১. প্রশ্নোত্তর</button>
-        <button onclick="openTab('evaluator', this)" class="tab-btn">📝 ২. খাতা এনালাইসিস</button>
-        <button onclick="openTab('notice', this)" class="tab-btn">📢 ৩. নোটিশ বোর্ড</button>
-    </div>
+    const apiKey = "আপনার_গেমিনি_এপিআই_কি_এখানে_দিন"; // এখানে আপনার ফ্রি Gemini API Key বসাবেন
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
 
-    <div class="container">
-        <!-- হোম ট্যাব -->
-        <div id="home" class="tab-content active">
-            <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
-            <p class="subtitle">আপনার ডিজিটাল স্টাডি পোর্টাল:</p>
-            <div class="result-box">❓ যেকোনো বিষয় বা ক্ষেত্র থেকে প্রশ্ন করুন, রিয়েল-টাইম সঠিক উত্তর পেয়ে যাবেন।</div>
-        </div>
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: question }] }]
+        })
+      });
 
-        <!-- ১. প্রশ্নোত্তর ট্যাব -->
-        <div id="qa" class="tab-content">
-            <h2>❓ প্রশ্ন ও সঠিক সমাধান</h2>
-            <p class="subtitle">যেকোনো বিষয় থেকে আপনার প্রশ্নটি নিচে লিখুন:</p>
-            <textarea id="questionInput" rows="3" placeholder="যেমন: মহাকর্ষ সূত্র কী? বা কোয়ান্টাম মেকানিক্স কি?"></textarea>
-            <button class="action-btn" onclick="askAI()">উত্তর খুঁজুন 🔍</button>
-            <div class="result-box" id="qaResult">এখানে সঠিক উত্তর দেখানো হবে...</div>
-        </div>
-
-        <!-- ২. খাতা এনালাইসিস ট্যাব -->
-        <div id="evaluator" class="tab-content">
-            <h2>📝 খাতা ও উত্তর এনালাইসিস</h2>
-            <input type="text" id="examQuestion" placeholder="পরীক্ষার প্রশ্নটি লিখুন...">
-            <textarea id="userAnswer" rows="4" placeholder="আপনার উত্তরটি লিখুন..."></textarea>
-            <button class="action-btn" onclick="evaluateAnswer()">খাতা এনালাইসিস করুন 📊</button>
-            <div class="result-box" id="evalResult">মূল্যায়ন এখানে দেখাবে...</div>
-        </div>
-
-        <!-- ৩. নোটিশ বোর্ড ট্যাব -->
-        <div id="notice" class="tab-content">
-            <h2>📢 ডিজিটাল নোটিশ বোর্ড</h2>
-            <div id="noticeContainer">
-                <div class="notice-card">
-                    <strong>📌 বার্ষিক প্রজেক্ট মূল্যায়ন ২০২৬</strong>
-                    <p style="margin-top: 5px; font-size: 14px;">সকল শিক্ষার্থীকে সময়মতো প্রজেক্ট জমা দিতে হবে।</p>
-                    <span class="notice-date">তারিখ: ১২ আগস্ট, ২০২৬</span>
-                </div>
-            </div>
-            <div style="margin-top: 20px; border-top: 1px solid #334155; padding-top: 15px;">
-                <input type="text" id="noticeTitle" placeholder="নোটিশের শিরোনাম...">
-                <textarea id="noticeBody" rows="2" placeholder="বিবরণ..."></textarea>
-                <button class="action-btn" style="background-color: #22c55e;" onclick="addNotice()">নোটিশ প্রকাশ করুন</button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function openTab(tabId, element) {
-            var contents = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < contents.length; i++) contents[i].classList.remove("active");
-            var buttons = document.querySelectorAll(".nav-tabs .tab-btn");
-            for (var j = 0; j < buttons.length; j++) buttons[j].classList.remove("active");
-            document.getElementById(tabId).classList.add("active");
-            element.classList.add("active");
-        }
-
-        // যে কোনো বিষয় থেকে তাৎক্ষণিক রিয়েল-টাইম উত্তর পাওয়ার জন্য স্মার্ট ইন্টিগ্রেশন
-        async function askAI() {
-            var q = document.getElementById("questionInput").value.trim();
-            var resultBox = document.getElementById("qaResult");
-
-            if (!q) {
-                alert("দয়া করে একটি প্রশ্ন লিখুন!");
-                return;
-            }
-
-            resultBox.innerHTML = `<span class="loading-text">⏳ এআই উত্তর তৈরি করছে, দয়া করে অপেক্ষা করুন...</span>`;
-
-            try {
-                // একটি পাবলিক উন্মুক্ত প্রক্সি এআই এন্ডপয়েন্ট যা ব্রাউজার থেকে সরাসরি যেকোনো প্রশ্নের উত্তর জেনারেট করতে পারে
-                let response = await fetch(`https://kaiz-apis.gleeze.com/api/gpt-4o-mini?q=${encodeURIComponent(q)}`);
-                let data = await response.json();
-
-                let answer = data.response || data.result || data.answer || "দুঃখিত, উত্তরটি লোড করা সম্ভব হয়নি। আবার চেষ্টা করুন।";
-                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>সঠিক উত্তর:</strong><br>${answer}`;
-            } catch (error) {
-                // কোনো নেটওয়ার্ক সমস্যা হলে ফলব্যাক বা ডিফল্ট স্মার্ট রেসপন্স
-                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>সঠিক উত্তর:</strong><br>"${q}" এর মূল বিষয়বস্তু হলো অত্যন্ত গুরুত্বপূর্ণ। এটি অধ্যয়ন করার সময় এর সংজ্ঞা, মূল বৈশিষ্ট্য এবং বাস্তব উদাহরণগুলো ভালোভাবে আয়ত্ত করা উচিত।`;
-            }
-        }
-
-        function evaluateAnswer() {
-            var q = document.getElementById("examQuestion").value.trim();
-            var ans = document.getElementById("userAnswer").value.trim();
-            var resultBox = document.getElementById("evalResult");
-
-            if (!q || !ans) {
-                alert("প্রশ্ন এবং উত্তর উভয়ই লিখুন!");
-                return;
-            }
-
-            resultBox.innerHTML = `<span class="loading-text">⏳ খাতা এনালাইসিস করা হচ্ছে...</span>`;
-            setTimeout(function() {
-                let score = ans.length > 50 ? "৯.৫/১০" : "৮.০/১০";
-                resultBox.innerHTML = `📊 <strong>খাতা মূল্যায়ন রেজাল্ট:</strong><br><br><strong>প্রাপ্ত নম্বর:</strong> ${score}<br><strong>ফিডব্যাক:</strong> আপনার উত্তরটি সুন্দর হয়েছে। আরও কিছু প্রাসঙ্গিক তথ্য যোগ করলে এটি আরও নিখুঁত হতো।`;
-            }, 600);
-        }
-
-        function addNotice() {
-            var title = document.getElementById("noticeTitle").value.trim();
-            var body = document.getElementById("noticeBody").value.trim();
-            if (!title || !body) { alert("সব ফিল্ড পূরণ করুন!"); return; }
-
-            var container = document.getElementById("noticeContainer");
-            var newNotice = document.createElement("div");
-            newNotice.className = "notice-card";
-            newNotice.innerHTML = `<strong>📌 ${title}</strong><p style="margin-top: 5px; font-size: 14px;">${body}</p><span class="notice-date">তারিখ: এইমাত্র</span>`;
-            container.prepend(newNotice);
-
-            document.getElementById("noticeTitle").value = "";
-            document.getElementById("noticeBody").value = "";
-            alert("নোটিশ প্রকাশ হয়েছে!");
-        }
-    </script>
-</body>
-</html>
-                                 
+      const data = await response.json();
+      const aiReply = data.candidates[0].content.parts[0].text;
+      outputDiv.innerText = aiReply;
+    } catch (error) {
+      outputDiv.innerText = "দুঃখিত, উত্তর আনতে সমস্যা হয়েছে। আবার চেষ্টা করুন।";
+    }
+  }
+</script>
+                    
 
         
             
