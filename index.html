@@ -129,6 +129,11 @@
             background-color: #4f46e5;
         }
 
+        button:disabled {
+            background-color: #475569;
+            cursor: not-allowed;
+        }
+
         .result-box {
             margin-top: 20px;
             padding: 15px;
@@ -136,6 +141,7 @@
             border: 1px solid #334155;
             border-radius: 8px;
             line-height: 1.6;
+            word-wrap: break-word;
         }
 
         .notice-card {
@@ -149,6 +155,11 @@
         .notice-date {
             font-size: 12px;
             color: #94a3b8;
+        }
+
+        .loading-spinner {
+            color: #38bdf8;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -178,10 +189,10 @@
             <p class="subtitle">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম। প্রয়োজনীয় সুবিধা বেছে নিন:</p>
             
             <div class="result-box">
-                ❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সাথে সাথে নির্ভুল উত্তর জেনে নিন।
+                ❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সাথে সাথে এআই থেকে সঠিক উত্তর জেনে নিন।
             </div>
             <div class="result-box">
-                📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখা উত্তর ঠিক আছে কিনা পরীক্ষা করে মার্কস ও মন্তব্য পান।
+                📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখা উত্তর ঠিক আছে কিনা তা এআই দিয়ে পরীক্ষা করে মার্কস ও মন্তব্য পান।
             </div>
             <div class="result-box">
                 📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ জরুরি ঘোষণা ও নোটিশসমূহ দেখুন।
@@ -191,22 +202,22 @@
             </div>
         </div>
 
-        <!-- TAB 1: Q&A Solver -->
+        <!-- TAB 1: Q&A Solver (Real AI) -->
         <div id="qa" class="tab-content">
-            <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
-            <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
-            <textarea id="questionInput" rows="3" placeholder="প্রশ্ন লিখুন (যেমন: সালোকসংশ্লেষণ কাকে বলে?)..."></textarea>
-            <button class="action-btn" onclick="solveQuestion()">উত্তর খুঁজুন</button>
-            <div class="result-box" id="qaResult">এখানে প্রশ্নের উত্তর দেখানো হবে...</div>
+            <h2>❓ এআই প্রশ্ন ও সমাধান (রিয়েল-টাইম)</h2>
+            <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন (এআই সরাসরি উত্তর দেবে):</p>
+            <textarea id="questionInput" rows="3" placeholder="যেমন: সালোকসংশ্লেষণ কাকে বলে? বা বাংলাদেশের রাজধানী কোথায়?"></textarea>
+            <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
+            <div class="result-box" id="qaResult">এখানে এআই থেকে প্রশ্নের উত্তর দেখানো হবে...</div>
         </div>
 
-        <!-- TAB 2: Answer Evaluator -->
+        <!-- TAB 2: Answer Evaluator (Real AI) -->
         <div id="evaluator" class="tab-content">
-            <h2>📝 উত্তর মূল্যায়ন ও মার্কিং</h2>
-            <p class="subtitle">পরীক্ষার প্রশ্ন এবং আপনার লেখা উত্তর দিয়ে যাচাই করুন:</p>
+            <h2>📝 উত্তর মূল্যায়ন ও মার্কিং (রিয়েল এআই)</h2>
+            <p class="subtitle">পরীক্ষার প্রশ্ন এবং আপনার উত্তর দিন, এআই পরীক্ষা করে পয়েন্ট ও ফিডব্যাক দেবে:</p>
             <input type="text" id="examQuestion" placeholder="পরীক্ষার প্রশ্নটি লিখুন...">
             <textarea id="userAnswer" rows="4" placeholder="আপনার লেখা উত্তরটি এখানে লিখুন..."></textarea>
-            <button class="action-btn" onclick="evaluateAnswer()">উত্তর মূল্যায়ন করুন</button>
+            <button class="action-btn" id="evalBtn" onclick="evaluateAnswer()">উত্তর মূল্যায়ন করুন 📊</button>
             <div class="result-box" id="evalResult">মূল্যায়ন ও প্রাপ্ত নম্বর এখানে দেখাবে...</div>
         </div>
 
@@ -252,7 +263,7 @@
 
     </div>
 
-    <!-- JavaScript Logic Script -->
+    <!-- JavaScript Real AI Integration Logic -->
     <script>
         function openTab(tabId, element) {
             var contents = document.getElementsByClassName("tab-content");
@@ -267,54 +278,70 @@
             element.classList.add("active");
         }
 
-        // 1. Q&A Solver Logic
-        function solveQuestion() {
-            var q = document.getElementById("questionInput").value;
+        // 1. Real AI Q&A Solver Logic
+        async function solveQuestion() {
+            var q = document.getElementById("questionInput").value.trim();
+            var btn = document.getElementById("qaBtn");
+            var resultBox = document.getElementById("qaResult");
+
             if (!q) {
                 alert("অনুগ্রহ করে একটি প্রশ্ন লিখুন!");
                 return;
             }
-            document.getElementById("qaResult").innerHTML = `
-                💡 <strong>প্রশ্ন:</strong> ${q}<br><br>
-                ✅ <strong>উত্তর:</strong> আপনার প্রশ্নের সঠিক সমাধান নিচে দেওয়া হলো। এই বিষয়টি ভালোভাবে বুঝতে আপনার পাঠ্যবইয়ের সংশ্লিষ্ট অধ্যায়টি রিভিশন করুন এবং মূল পয়েন্টগুলো খাতায় লিখে অনুশীলন করুন।
-            `;
+
+            btn.disabled = true;
+            resultBox.innerHTML = `<span class="loading-spinner">⏳ এআই চিন্তা করছে ও উত্তর তৈরি করছে... অনুগ্রহ করে কয়েক সেকেন্ড অপেক্ষা করুন।</span>`;
+
+            try {
+                var prompt = encodeURIComponent("You are an educational AI tutor. Answer this question clearly in Bengali: " + q);
+                var response = await fetch("https://text.pollinations.ai/" + prompt);
+                var answerText = await response.text();
+
+                // Format response
+                var formattedAnswer = answerText.replace(/\n/g, "<br>");
+                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>এআই উত্তর:</strong><br>${formattedAnswer}`;
+            } catch (error) {
+                resultBox.innerHTML = `❌ উত্তর পেতে সমস্যা হয়েছে। অনুগ্রহ করে ইন্টারনেট কানেকশন চেক করে আবার চেষ্টা করুন।`;
+            } finally {
+                btn.disabled = false;
+            }
         }
 
-        // 2. Answer Evaluator Logic
-        function evaluateAnswer() {
-            var q = document.getElementById("examQuestion").value;
-            var ans = document.getElementById("userAnswer").value;
+        // 2. Real AI Answer Evaluator Logic
+        async function evaluateAnswer() {
+            var q = document.getElementById("examQuestion").value.trim();
+            var ans = document.getElementById("userAnswer").value.trim();
+            var btn = document.getElementById("evalBtn");
+            var resultBox = document.getElementById("evalResult");
 
             if (!q || !ans) {
-                alert("প্রশ্ন এবং উত্তর দুটিই পূরণ করুন!");
+                alert("প্রশ্ন এবং আপনার লেখা উত্তর দুটিই পূরণ করুন!");
                 return;
             }
 
-            var wordCount = ans.trim().split(/\s+/).length;
-            var score = 5;
-            var remark = "";
+            btn.disabled = true;
+            resultBox.innerHTML = `<span class="loading-spinner">⏳ এআই আপনার উত্তরটি নিখুঁতভাবে মূল্যায়ন করছে... অপেক্ষা করুন।</span>`;
 
-            if (wordCount > 30) {
-                score = 9;
-                remark = "🌟 <strong>চমৎকার!</strong> উত্তরটি বেশ গুছিয়ে ও মানসম্মতভাবে লেখা হয়েছে।";
-            } else if (wordCount > 15) {
-                score = 7;
-                remark = "👍 <strong>ভালো হয়েছে!</strong> উত্তরটি সঠিক তবে আরেকটু বিস্তারিত লিখলে আরও ভালো নম্বর পাওয়া যাবে।";
-            } else {
-                score = 5;
-                remark = "⚠️ <strong>অসম্পূর্ণ!</strong> উত্তরটি বেশ ছোট হয়েছে। আরও পয়েন্ট ও ব্যাখ্যা যুক্ত করুন।";
+            try {
+                var promptText = "You are a school teacher evaluating a student answer in Bengali.\nQuestion: " + q + "\nStudent Answer: " + ans + "\nEvaluate the answer. Give a score out of 10, explain if it is correct or incorrect, and provide tips to improve it. Write everything in Bengali language.";
+                var prompt = encodeURIComponent(promptText);
+
+                var response = await fetch("https://text.pollinations.ai/" + prompt);
+                var evalText = await response.text();
+
+                var formattedEval = evalText.replace(/\n/g, "<br>");
+                resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${formattedEval}`;
+            } catch (error) {
+                resultBox.innerHTML = `❌ মূল্যায়ন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।`;
+            } finally {
+                btn.disabled = false;
             }
-
-            document.getElementById("evalResult").innerHTML = `
-                📊 <strong>প্রাপ্ত নম্বর:</strong> ${score} / ১০<br><br>
-                💬 <strong>মূল্যায়ন ও ফিডব্যাক:</strong><br>${remark}
-            `;
         }
 
-        // 3. Notice Board Add Logic
+        // 3. Notice Board Logic
         function addNotice() {
-            var title = document.getElementById("noticeTitle").value;
-            var body = document.getElementById("noticeBody").value;
+            var title = document.getElementById("noticeTitle").value.trim();
+            var body = document.getElementById("noticeBody").value.trim();
 
             if (!title || !body) {
                 alert("নোটিশের শিরোনাম ও বিবরণ দিন!");
@@ -341,7 +368,5 @@
     </script>
 </body>
 </html>
-                
-    
-        
-            
+
+                    
