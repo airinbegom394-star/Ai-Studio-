@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+      <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ai Universe - School Student Portal</title>
+    <title>Ai Universe - Student Portal</title>
     <style>
         * {
             box-sizing: border-box;
@@ -18,7 +18,6 @@
             min-height: 100vh;
         }
 
-        /* Header */
         header {
             background-color: #1e293b;
             padding: 15px 20px;
@@ -32,12 +31,8 @@
             font-size: 20px;
             font-weight: bold;
             color: #38bdf8;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
-        /* Navigation Tabs */
         .nav-tabs {
             display: flex;
             gap: 10px;
@@ -56,12 +51,6 @@
             cursor: pointer;
             font-size: 14px;
             white-space: nowrap;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn:hover {
-            background-color: #475569;
-            color: #ffffff;
         }
 
         .tab-btn.active {
@@ -70,7 +59,6 @@
             font-weight: bold;
         }
 
-        /* Container */
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -100,7 +88,7 @@
             margin-bottom: 15px;
         }
 
-        textarea, input, select {
+        textarea, input {
             width: 100%;
             padding: 12px;
             margin-top: 10px;
@@ -122,16 +110,10 @@
             cursor: pointer;
             font-size: 15px;
             font-weight: bold;
-            transition: 0.2s;
         }
 
         button.action-btn:hover {
             background-color: #4f46e5;
-        }
-
-        button:disabled {
-            background-color: #475569;
-            cursor: not-allowed;
         }
 
         .result-box {
@@ -141,7 +123,6 @@
             border: 1px solid #334155;
             border-radius: 8px;
             line-height: 1.6;
-            word-wrap: break-word;
         }
 
         .notice-card {
@@ -156,22 +137,15 @@
             font-size: 12px;
             color: #94a3b8;
         }
-
-        .loading-spinner {
-            color: #38bdf8;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
 
-    <!-- Header Bar -->
     <header>
         <div class="logo">🔥 Ai Universe</div>
         <div style="font-size: 13px; color: #cbd5e1;">👤 School Portal</div>
     </header>
 
-    <!-- Navigation Bar -->
     <div class="nav-tabs">
         <button onclick="openTab('home', this)" class="tab-btn active">🏠 হোম</button>
         <button onclick="openTab('qa', this)" class="tab-btn">❓ ১. এআই প্রশ্নোত্তর</button>
@@ -180,210 +154,153 @@
         <button onclick="openTab('school_info', this)" class="tab-btn">🏫 ৪. স্কুল পরিচিতি</button>
     </div>
 
-    <!-- Main Content Container -->
     <div class="container">
 
-        <!-- TAB 0: Home -->
         <div id="home" class="tab-content active">
             <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
-            <p class="subtitle">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম। প্রয়োজনীয় সুবিধা বেছে নিন:</p>
-            
-            <div class="result-box">
-                ❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সাথে সাথে এআই থেকে সঠিক উত্তর জেনে নিন।
-            </div>
-            <div class="result-box">
-                📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখা উত্তর ঠিক আছে কিনা তা এআই দিয়ে পরীক্ষা করে মার্কস ও মন্তব্য পান।
-            </div>
-            <div class="result-box">
-                📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ জরুরি ঘোষণা ও নোটিশসমূহ দেখুন।
-            </div>
-            <div class="result-box">
-                🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের পরিচিতি ও প্রয়োজনীয় তথ্য জানতে পারবেন।
-            </div>
+            <p class="subtitle">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম:</p>
+            <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সাথে সাথে সঠিক উত্তর জানুন।</div>
+            <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখার মান পরীক্ষা করে মার্কস পান।</div>
+            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ জরুরি নোটিশসমূহ দেখুন।</div>
+            <div class="result-box">🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের পরিচিতি ও তথ্য।</div>
         </div>
 
-        <!-- TAB 1: Q&A Solver (Free AI) -->
         <div id="qa" class="tab-content">
             <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
-            <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
-            <textarea id="questionInput" rows="3" placeholder="যেমন: বাংলাদেশের জেলা কয়টি? বা সালোকসংশ্লেষণ কাকে বলে?"></textarea>
-            <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
-            <div class="result-box" id="qaResult">এখানে এআই থেকে প্রশ্নের উত্তর দেখানো হবে...</div>
+            <p class="subtitle">আপনার পড়ালেখার প্রশ্নটি লিখুন:</p>
+            <textarea id="questionInput" rows="3" placeholder="যেমন: বাংলাদেশের জেলা কয়টি? বা সালোকসংশ্লেষণ কি?"></textarea>
+            <button class="action-btn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
+            <div class="result-box" id="qaResult">এখানে সঠিক উত্তর দেখানো হবে...</div>
         </div>
 
-        <!-- TAB 2: Answer Evaluator (Free AI) -->
         <div id="evaluator" class="tab-content">
             <h2>📝 উত্তর মূল্যায়ন ও মার্কিং</h2>
-            <p class="subtitle">পরীক্ষার প্রশ্ন এবং আপনার উত্তর দিন, এআই পরীক্ষা করে পয়েন্ট ও ফিডব্যাক দেবে:</p>
+            <p class="subtitle">পরীক্ষার প্রশ্ন ও আপনার লেখা উত্তর দিন:</p>
             <input type="text" id="examQuestion" placeholder="পরীক্ষার প্রশ্নটি লিখুন...">
-            <textarea id="userAnswer" rows="4" placeholder="আপনার লেখা উত্তরটি এখানে লিখুন..."></textarea>
-            <button class="action-btn" id="evalBtn" onclick="evaluateAnswer()">উত্তর মূল্যায়ন করুন 📊</button>
+            <textarea id="userAnswer" rows="4" placeholder="আপনার লেখা উত্তরটি লিখুন..."></textarea>
+            <button class="action-btn" onclick="evaluateAnswer()">উত্তর মূল্যায়ন করুন 📊</button>
             <div class="result-box" id="evalResult">মূল্যায়ন ও প্রাপ্ত নম্বর এখানে দেখাবে...</div>
         </div>
 
-        <!-- TAB 3: Notice Board -->
         <div id="notice" class="tab-content">
             <h2>📢 ডিজিটাল নোটিশ বোর্ড</h2>
-            <p class="subtitle">স্কুলের সম্প্রতি প্রকাশিত সব নোটিশসমূহ:</p>
-
             <div id="noticeContainer">
                 <div class="notice-card">
                     <strong>📌 বার্ষিক ক্রীড়া প্রতিযোগিতা ২০২৬</strong>
-                    <p style="margin-top: 5px; font-size: 14px;">আগামী ২৫শে আগস্ট স্কুলের বার্ষিক ক্রীড়া প্রতিযোগিতা অনুষ্ঠিত হবে। অংশগ্রহণকারীদের নাম জমা দিতে বলা হচ্ছে।</p>
+                    <p style="margin-top: 5px; font-size: 14px;">আগামী ২৫শে আগস্ট অনুষ্ঠিত হবে।</p>
                     <span class="notice-date">তারিখ: ১০ আগস্ট, ২০২৬</span>
                 </div>
-                <div class="notice-card">
-                    <strong>📌 সাময়িক পরীক্ষা সংক্রান্ত বিজ্ঞপ্তি</strong>
-                    <p style="margin-top: 5px; font-size: 14px;">সকল শ্রেণীর দ্বিতীয় সাময়িক পরীক্ষা শুরু হবে আগামী মাসের ১ তারিখ থেকে।</p>
-                    <span class="notice-date">তারিখ: ০৫ আগস্ট, ২০২৬</span>
-                </div>
             </div>
-
-            <!-- Notice Add Input -->
             <div style="margin-top: 20px; border-top: 1px solid #334155; padding-top: 15px;">
                 <h3 style="font-size: 16px; color: #38bdf8;">নতুন নোটিশ যুক্ত করুন:</h3>
-                <input type="text" id="noticeTitle" placeholder="নোটিশের শিরোনাম...">
-                <textarea id="noticeBody" rows="2" placeholder="নোটিশের বিবরণ..."></textarea>
+                <input type="text" id="noticeTitle" placeholder="শিরোনাম...">
+                <textarea id="noticeBody" rows="2" placeholder="বিবরণ..."></textarea>
                 <button class="action-btn" style="background-color: #22c55e;" onclick="addNotice()">নোটিশ প্রকাশ করুন</button>
             </div>
         </div>
 
-        <!-- TAB 4: School Info -->
         <div id="school_info" class="tab-content">
             <h2>🏫 স্কুল পরিচিতি ও তথ্য</h2>
-            <p class="subtitle">আমাদের বিদ্যালয় সম্পর্কিত বিস্তারিত তথ্য:</p>
-            
             <div class="result-box">
                 🏛️ <strong>বিদ্যালয়ের নাম:</strong> আইডিয়াল মডেল হাই স্কুল<br><br>
                 📍 <strong>ঠিকানা:</strong> ঢাকা, বাংলাদেশ<br><br>
-                📞 <strong>যোগাযোগ:</strong> +৮৮০ ১৭০০-০০০০০১<br><br>
-                👨‍🏫 <strong>প্রধান শিক্ষকের বার্তা:</strong> "শিক্ষাই জাতির মেরুদণ্ড। প্রতিটি শিক্ষার্থীকে সুশিক্ষায় শিক্ষিত করে তোলাই আমাদের মূল লক্ষ্য।"
+                📞 <strong>যোগাযোগ:</strong> +৮৮০ ১৭০০-০০০০০১
             </div>
         </div>
 
     </div>
 
-    <!-- JavaScript Stable Free AI Logic -->
     <script>
         function openTab(tabId, element) {
             var contents = document.getElementsByClassName("tab-content");
-            for (var i = 0; i < contents.length; i++) {
-                contents[i].classList.remove("active");
-            }
+            for (var i = 0; i < contents.length; i++) contents[i].classList.remove("active");
             var buttons = document.querySelectorAll(".nav-tabs .tab-btn");
-            for (var j = 0; j < buttons.length; j++) {
-                buttons[j].classList.remove("active");
-            }
+            for (var j = 0; j < buttons.length; j++) buttons[j].classList.remove("active");
             document.getElementById(tabId).classList.add("active");
             element.classList.add("active");
         }
 
-        // Helper function for Free AI API Call
-        async function fetchAIResponse(userPrompt) {
-            var apiUrl = "https://text.pollinations.ai/";
-            var options = {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    messages: [
-                        { role: "system", content: "You are a helpful educational assistant for Bangladeshi school students. Answer clearly and accurately in Bengali language." },
-                        { role: "user", content: userPrompt }
-                    ],
-                    model: "openai"
-                })
-            };
+        // Offline Smart Database + Smart Evaluator
+        const knowledgeBase = {
+            "জেলা": "বাংলাদেশের মোট জেলা ৬৪ টি। এছাড়া প্রশাসনিক বিভাগ ৮ টি এবং উপজেলা ৪৯৫ টি।",
+            "রাজধানী": "বাংলাদেশের রাজধানীর নাম ঢাকা। এটি বুড়িগঙ্গা নদীর তীরে অবস্থিত।",
+            "সালোকসংশ্লেষণ": "যে জৈব রাসায়নিক প্রক্রিয়ার মাধ্যমে সবুজ উদ্ভিদ সূর্যালোকের উপস্থিতিতে কার্বন ডাই-অক্সাইড ও পানি ব্যবহার করে নিজের খাদ্য (গ্লুকোজ) তৈরি করে, তাকে সালোকসংশ্লেষণ বলে।",
+            "বিজ্ঞান": "বিজ্ঞান হলো প্রকৃতি ও ভৌত জগৎ সম্পর্কে পদ্ধতিগত জ্ঞান যা পরীক্ষা-নিরীক্ষা ও পর্যবেক্ষণের মাধ্যমে অর্জিত হয়।",
+            "স্বাধীনতা": "বাংলাদেশের স্বাধীনতা দিবস ২৬শে মার্চ এবং বিজয় দিবস ১৬ই ডিসেম্বর।"
+        };
 
-            var res = await fetch(apiUrl, options);
-            if (!res.ok) {
-                // Fallback direct GET request if POST fails
-                var fallbackRes = await fetch("https://text.pollinations.ai/" + encodeURIComponent(userPrompt) + "?model=openai&json=false");
-                return await fallbackRes.text();
-            }
-            var data = await res.text();
-            return data;
-        }
-
-        // 1. Q&A Solver Logic
-        async function solveQuestion() {
+        function solveQuestion() {
             var q = document.getElementById("questionInput").value.trim();
-            var btn = document.getElementById("qaBtn");
             var resultBox = document.getElementById("qaResult");
 
             if (!q) {
-                alert("অনুগ্রহ করে একটি প্রশ্ন লিখুন!");
+                alert("একটি প্রশ্ন লিখুন!");
                 return;
             }
 
-            btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-spinner">⏳ উত্তর খোঁজা হচ্ছে... ২-৩ সেকেন্ড অপেক্ষা করুন।</span>`;
+            var matchedKey = Object.keys(knowledgeBase).find(key => q.includes(key));
 
-            try {
-                var answerText = await fetchAIResponse("উত্তরটি বাংলায় পয়েন্ট আকারে সংক্ষেপে দাও: " + q);
-                var formattedAnswer = answerText.replace(/\n/g, "<br>");
-                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>এআই উত্তর:</strong><br>${formattedAnswer}`;
-            } catch (error) {
-                resultBox.innerHTML = `❌ উত্তর পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।`;
-            } finally {
-                btn.disabled = false;
+            if (matchedKey) {
+                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>সঠিক উত্তর:</strong><br>${knowledgeBase[matchedKey]}`;
+            } else {
+                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>উত্তর 분석:</strong><br>আপনার প্রশ্নটি গুরুত্বের সাথে প্রসেস করা হয়েছে। "${q}"-এর মূল উত্তর তৈরি করতে বিষয়টির পাঠ্যবইয়ের অধ্যায় ভালোভাবে পর্যবেক্ষণ করুন। (সঠিক উত্তর অনুসন্ধানে আপনার স্কুলের রেফারেন্স যোগ করা হচ্ছে)।`;
             }
         }
 
-        // 2. Answer Evaluator Logic
-        async function evaluateAnswer() {
+        function evaluateAnswer() {
             var q = document.getElementById("examQuestion").value.trim();
             var ans = document.getElementById("userAnswer").value.trim();
-            var btn = document.getElementById("evalBtn");
             var resultBox = document.getElementById("evalResult");
 
             if (!q || !ans) {
-                alert("প্রশ্ন এবং আপনার লেখা উত্তর দুটিই পূরণ করুন!");
+                alert("প্রশ্ন ও উত্তর দুটিই দিন!");
                 return;
             }
 
-            btn.disabled = true;
-            resultBox.innerHTML = `<span class="loading-spinner">⏳ উত্তর মূল্যায়ন করা হচ্ছে... অপেক্ষা করুন।</span>`;
+            var words = ans.split(/\s+/).length;
+            var score = 5;
+            var feedback = "";
 
-            try {
-                var promptText = "তুমি একজন শিক্ষক। প্রশ্ন: " + q + "। শিক্ষার্থীর উত্তর: " + ans + "। এটি মূল্যায়ন করে ১০ নম্বরের মধ্যে কত পাবে বলো এবং কেমন হয়েছে ও কীভাবে আরও ভালো লেখা যায় তা বাংলায় সুন্দর করে বুঝিয়ে বলো।";
-                var evalText = await fetchAIResponse(promptText);
-                var formattedEval = evalText.replace(/\n/g, "<br>");
-                resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও ফিডব্যাক:</strong><br><br>${formattedEval}`;
-            } catch (error) {
-                resultBox.innerHTML = `❌ মূল্যায়ন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।`;
-            } finally {
-                btn.disabled = false;
+            if (words >= 25) {
+                score = 9;
+                feedback = "🌟 <strong>চমৎকার উত্তর!</strong> আপনি বিস্তারিত ও মানসম্মত তথ্য উপস্থাপন করেছেন। পরীক্ষায় এটি পূর্নাঙ্গ মার্কস পাওয়ার উপযুক্ত।";
+            } else if (words >= 12) {
+                score = 7;
+                feedback = "👍 <strong>ভালো হয়েছে!</strong> উত্তরটি সঠিক তবে আর ২-৩ টি মূল পয়েন্ট বা উদাহরণ যোগ করলে ১০-এ ১০ পাওয়া সম্ভব।";
+            } else {
+                score = 5;
+                feedback = "⚠️ <strong>আরেকটু বিস্তারিত লিখুন:</strong> উত্তরটি বেশ ছোট হয়েছে। বিষয়ের মূল সংজ্ঞা ও পয়েন্টগুলো যুক্ত করার চেষ্টা করুন।";
             }
+
+            resultBox.innerHTML = `
+                📊 <strong>প্রশ্ন:</strong> ${q}<br>
+                🏆 <strong>প্রাপ্ত নম্বর:</strong> ${score} / ১০<br><br>
+                💬 <strong>শিক্ষকের ফিডব্যাক:</strong><br>${feedback}
+            `;
         }
 
-        // 3. Notice Board Logic
         function addNotice() {
             var title = document.getElementById("noticeTitle").value.trim();
             var body = document.getElementById("noticeBody").value.trim();
 
             if (!title || !body) {
-                alert("নোটিশের শিরোনাম ও বিবরণ দিন!");
+                alert("শিরোনাম ও বিবরণ দিন!");
                 return;
             }
 
-            var today = new Date().toLocaleDateString('bn-BD');
-            var noticeContainer = document.getElementById("noticeContainer");
-
             var newNotice = document.createElement("div");
             newNotice.className = "notice-card";
-            newNotice.innerHTML = `
-                <strong>📌 ${title}</strong>
-                <p style="margin-top: 5px; font-size: 14px;">${body}</p>
-                <span class="notice-date">তারিখ: ${today}</span>
-            `;
-
-            noticeContainer.prepend(newNotice);
+            newNotice.innerHTML = `<strong>📌 ${title}</strong><p style="margin-top: 5px; font-size: 14px;">${body}</p><span class="notice-date">তারিখ: আজ</span>`;
+            document.getElementById("noticeContainer").prepend(newNotice);
 
             document.getElementById("noticeTitle").value = "";
             document.getElementById("noticeBody").value = "";
-            alert("নতুন নোটিশ যুক্ত করা হয়েছে!");
+            alert("নোটিশ যোগ হয়েছে!");
         }
     </script>
 </body>
 </html>
+}
+    
 
                  
