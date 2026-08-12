@@ -1,9 +1,13 @@
-      <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ai Universe - Student Portal</title>
+
+    <!-- Puter.js Library for Free Unlimited Real AI -->
+    <script src="https://js.puter.com/v2/"></script>
+
     <style>
         * {
             box-sizing: border-box;
@@ -116,6 +120,11 @@
             background-color: #4f46e5;
         }
 
+        button:disabled {
+            background-color: #475569;
+            cursor: not-allowed;
+        }
+
         .result-box {
             margin-top: 20px;
             padding: 15px;
@@ -123,6 +132,7 @@
             border: 1px solid #334155;
             border-radius: 8px;
             line-height: 1.6;
+            word-wrap: break-word;
         }
 
         .notice-card {
@@ -136,6 +146,11 @@
         .notice-date {
             font-size: 12px;
             color: #94a3b8;
+        }
+
+        .loading-text {
+            color: #38bdf8;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -159,18 +174,18 @@
         <div id="home" class="tab-content active">
             <h2>🏠 স্বাগতম Ai Universe-এ!</h2>
             <p class="subtitle">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম:</p>
-            <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> যেকোনো প্রশ্ন লিখে সাথে সাথে সঠিক উত্তর জানুন।</div>
-            <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখার মান পরীক্ষা করে মার্কস পান।</div>
-            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ জরুরি নোটিশসমূহ দেখুন।</div>
-            <div class="result-box">🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের পরিচিতি ও তথ্য।</div>
+            <div class="result-box">❓ <strong>এআই প্রশ্নোত্তর:</strong> পৃথিবীর যেকোনো প্রশ্ন লিখে সাথে সাথে নিখুঁত উত্তর জানুন।</div>
+            <div class="result-box">📝 <strong>উত্তর মূল্যায়ন:</strong> আপনার লেখার মান পরীক্ষা করে মার্কস ও পরামর্শ পান।</div>
+            <div class="result-box">📢 <strong>নোটিশ বোর্ড:</strong> স্কুলের সর্বশেষ নোটিশ দেখুন।</div>
+            <div class="result-box">🏫 <strong>স্কুল পরিচিতি:</strong> আমাদের স্কুলের তথ্য।</div>
         </div>
 
         <div id="qa" class="tab-content">
-            <h2>❓ এআই প্রশ্ন ও সমাধান</h2>
-            <p class="subtitle">আপনার পড়ালেখার প্রশ্নটি লিখুন:</p>
-            <textarea id="questionInput" rows="3" placeholder="যেমন: বাংলাদেশের জেলা কয়টি? বা সালোকসংশ্লেষণ কি?"></textarea>
-            <button class="action-btn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
-            <div class="result-box" id="qaResult">এখানে সঠিক উত্তর দেখানো হবে...</div>
+            <h2>❓ রিয়েল এআই প্রশ্ন ও সমাধান</h2>
+            <p class="subtitle">আপনার পড়ালেখার যেকোনো প্রশ্ন নিচে লিখুন:</p>
+            <textarea id="questionInput" rows="3" placeholder="যেমন: গণিত, বিজ্ঞান, ইতিহাস বা যেকোনো প্রশ্ন লিখুন..."></textarea>
+            <button class="action-btn" id="qaBtn" onclick="solveQuestion()">উত্তর খুঁজুন 🔍</button>
+            <div class="result-box" id="qaResult">এখানে এআই-এর সঠিক উত্তর দেখানো হবে...</div>
         </div>
 
         <div id="evaluator" class="tab-content">
@@ -178,7 +193,7 @@
             <p class="subtitle">পরীক্ষার প্রশ্ন ও আপনার লেখা উত্তর দিন:</p>
             <input type="text" id="examQuestion" placeholder="পরীক্ষার প্রশ্নটি লিখুন...">
             <textarea id="userAnswer" rows="4" placeholder="আপনার লেখা উত্তরটি লিখুন..."></textarea>
-            <button class="action-btn" onclick="evaluateAnswer()">উত্তর মূল্যায়ন করুন 📊</button>
+            <button class="action-btn" id="evalBtn" onclick="evaluateAnswer()">উত্তর মূল্যায়ন করুন 📊</button>
             <div class="result-box" id="evalResult">মূল্যায়ন ও প্রাপ্ত নম্বর এখানে দেখাবে...</div>
         </div>
 
@@ -220,65 +235,74 @@
             element.classList.add("active");
         }
 
-        // Offline Smart Database + Smart Evaluator
-        const knowledgeBase = {
-            "জেলা": "বাংলাদেশের মোট জেলা ৬৪ টি। এছাড়া প্রশাসনিক বিভাগ ৮ টি এবং উপজেলা ৪৯৫ টি।",
-            "রাজধানী": "বাংলাদেশের রাজধানীর নাম ঢাকা। এটি বুড়িগঙ্গা নদীর তীরে অবস্থিত।",
-            "সালোকসংশ্লেষণ": "যে জৈব রাসায়নিক প্রক্রিয়ার মাধ্যমে সবুজ উদ্ভিদ সূর্যালোকের উপস্থিতিতে কার্বন ডাই-অক্সাইড ও পানি ব্যবহার করে নিজের খাদ্য (গ্লুকোজ) তৈরি করে, তাকে সালোকসংশ্লেষণ বলে।",
-            "বিজ্ঞান": "বিজ্ঞান হলো প্রকৃতি ও ভৌত জগৎ সম্পর্কে পদ্ধতিগত জ্ঞান যা পরীক্ষা-নিরীক্ষা ও পর্যবেক্ষণের মাধ্যমে অর্জিত হয়।",
-            "স্বাধীনতা": "বাংলাদেশের স্বাধীনতা দিবস ২৬শে মার্চ এবং বিজয় দিবস ১৬ই ডিসেম্বর।"
-        };
-
-        function solveQuestion() {
+        // 1. Real AI Question Solver using Puter AI
+        async function solveQuestion() {
             var q = document.getElementById("questionInput").value.trim();
+            var btn = document.getElementById("qaBtn");
             var resultBox = document.getElementById("qaResult");
 
             if (!q) {
-                alert("একটি প্রশ্ন লিখুন!");
+                alert("অনুগ্রহ করে একটি প্রশ্ন লিখুন!");
                 return;
             }
 
-            var matchedKey = Object.keys(knowledgeBase).find(key => q.includes(key));
+            btn.disabled = true;
+            resultBox.innerHTML = `<span class="loading-text">⏳ এআই চিন্তা করছে ও উত্তর লিখছে... কয়েক সেকেন্ড অপেক্ষা করুন।</span>`;
 
-            if (matchedKey) {
-                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>সঠিক উত্তর:</strong><br>${knowledgeBase[matchedKey]}`;
-            } else {
-                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>উত্তর 분석:</strong><br>আপনার প্রশ্নটি গুরুত্বের সাথে প্রসেস করা হয়েছে। "${q}"-এর মূল উত্তর তৈরি করতে বিষয়টির পাঠ্যবইয়ের অধ্যায় ভালোভাবে পর্যবেক্ষণ করুন। (সঠিক উত্তর অনুসন্ধানে আপনার স্কুলের রেফারেন্স যোগ করা হচ্ছে)।`;
+            try {
+                var prompt = "You are an educational AI assistant for Bangladeshi school students. Answer the following question accurately, clearly, and nicely in Bengali language:\n\n" + q;
+                
+                // Puter AI Chat Call (No API Key Required)
+                var response = await puter.ai.chat(prompt);
+                var answerText = response.toString();
+
+                var formattedAnswer = answerText.replace(/\n/g, "<br>");
+                resultBox.innerHTML = `💡 <strong>প্রশ্ন:</strong> ${q}<br><br>✅ <strong>এআই উত্তর:</strong><br>${formattedAnswer}`;
+            } catch (error) {
+                resultBox.innerHTML = `❌ উত্তর পেতে সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।`;
+            } finally {
+                btn.disabled = false;
             }
         }
 
-        function evaluateAnswer() {
+        // 2. Real AI Answer Evaluator
+        async function evaluateAnswer() {
             var q = document.getElementById("examQuestion").value.trim();
             var ans = document.getElementById("userAnswer").value.trim();
+            var btn = document.getElementById("evalBtn");
             var resultBox = document.getElementById("evalResult");
 
             if (!q || !ans) {
-                alert("প্রশ্ন ও উত্তর দুটিই দিন!");
+                alert("প্রশ্ন এবং উত্তর দুটিই লিখুন!");
                 return;
             }
 
-            var words = ans.split(/\s+/).length;
-            var score = 5;
-            var feedback = "";
+            btn.disabled = true;
+            resultBox.innerHTML = `<span class="loading-text">⏳ এআই আপনার উত্তরটি নিখুঁতভাবে মূল্যায়ন করছে...</span>`;
 
-            if (words >= 25) {
-                score = 9;
-                feedback = "🌟 <strong>চমৎকার উত্তর!</strong> আপনি বিস্তারিত ও মানসম্মত তথ্য উপস্থাপন করেছেন। পরীক্ষায় এটি পূর্নাঙ্গ মার্কস পাওয়ার উপযুক্ত।";
-            } else if (words >= 12) {
-                score = 7;
-                feedback = "👍 <strong>ভালো হয়েছে!</strong> উত্তরটি সঠিক তবে আর ২-৩ টি মূল পয়েন্ট বা উদাহরণ যোগ করলে ১০-এ ১০ পাওয়া সম্ভব।";
-            } else {
-                score = 5;
-                feedback = "⚠️ <strong>আরেকটু বিস্তারিত লিখুন:</strong> উত্তরটি বেশ ছোট হয়েছে। বিষয়ের মূল সংজ্ঞা ও পয়েন্টগুলো যুক্ত করার চেষ্টা করুন।";
+            try {
+                var prompt = `You are a school teacher in Bangladesh. Evaluate this answer.
+Question: ${q}
+Student Answer: ${ans}
+
+Write evaluation in Bengali language:
+1. Give a score out of 10.
+2. Explain strengths and weaknesses.
+3. Suggest how to improve.`;
+
+                var response = await puter.ai.chat(prompt);
+                var evalText = response.toString();
+
+                var formattedEval = evalText.replace(/\n/g, "<br>");
+                resultBox.innerHTML = `📊 <strong>উত্তর মূল্যায়ন ও রেজাল্ট:</strong><br><br>${formattedEval}`;
+            } catch (error) {
+                resultBox.innerHTML = `❌ মূল্যায়ন করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।`;
+            } finally {
+                btn.disabled = false;
             }
-
-            resultBox.innerHTML = `
-                📊 <strong>প্রশ্ন:</strong> ${q}<br>
-                🏆 <strong>প্রাপ্ত নম্বর:</strong> ${score} / ১০<br><br>
-                💬 <strong>শিক্ষকের ফিডব্যাক:</strong><br>${feedback}
-            `;
         }
 
+        // 3. Notice Board Logic
         function addNotice() {
             var title = document.getElementById("noticeTitle").value.trim();
             var body = document.getElementById("noticeBody").value.trim();
@@ -300,7 +324,6 @@
     </script>
 </body>
 </html>
-}
-    
-
                  
+
+                                    
