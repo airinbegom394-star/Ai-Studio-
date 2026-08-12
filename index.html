@@ -16,7 +16,6 @@
             color: #ffffff;
             padding-bottom: 50px;
         }
-        /* Header / Navbar */
         header {
             display: flex;
             justify-content: space-between;
@@ -43,12 +42,7 @@
             color: #94a3b8;
             font-size: 0.9rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 5px;
         }
-
-        /* Sub Navigation Menu */
         .sub-nav {
             display: flex;
             gap: 10px;
@@ -65,9 +59,9 @@
             color: #cbd5e1;
             padding: 8px 16px;
             border-radius: 8px;
-            text-decoration: none;
-            font-size: 0.9rem;
             cursor: pointer;
+            font-size: 0.9rem;
+            border: none;
             transition: 0.3s;
         }
         .nav-item.active, .nav-item:hover {
@@ -75,8 +69,6 @@
             color: #ffffff;
             font-weight: 500;
         }
-
-        /* Main Content Container */
         .container {
             max-width: 600px;
             margin: 20px auto;
@@ -86,7 +78,6 @@
             padding: 25px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
         }
-
         .card-title {
             color: #38bdf8;
             font-size: 1.4rem;
@@ -97,8 +88,6 @@
             font-size: 0.95rem;
             margin-bottom: 20px;
         }
-
-        /* Form Elements */
         input[type="text"], textarea {
             width: 100%;
             background-color: #0f172a;
@@ -114,7 +103,6 @@
             outline: none;
             border-color: #6366f1;
         }
-
         .action-btn {
             width: 100%;
             background-color: #6366f1;
@@ -125,13 +113,10 @@
             font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            transition: background 0.3s;
         }
         .action-btn:hover {
             background-color: #4f46e5;
         }
-
-        /* Result Box */
         .result-box {
             background-color: #0f172a;
             border: 1px solid #334155;
@@ -140,14 +125,12 @@
             margin-top: 20px;
             display: none;
         }
-
         .section-view {
             display: none;
         }
         .section-view.active {
             display: block;
         }
-
         .notice-item {
             background: #0f172a;
             padding: 12px 15px;
@@ -160,31 +143,28 @@
 </head>
 <body>
 
-    <!-- Header Section -->
     <header>
         <div class="logo">
             <span>🔥</span> Ai Universe
         </div>
-        <button class="portal-btn">
-            👤 Student Portal
-        </button>
+        <button class="portal-btn">👤 Student Portal</button>
     </header>
 
-    <!-- Navigation Bar -->
+    <!-- Fixed Navigation Bar -->
     <div class="sub-nav">
-        <a class="nav-item active" onclick="switchTab('home')">🏠 হোম</a>
-        <a class="nav-item" onclick="switchTab('qa')">❓ ১. এআই প্রশ্নোত্তর</a>
-        <a class="nav-item" onclick="switchTab('eval')">📝 ২. উত্তর মূল্যায়ন</a>
-        <a class="nav-item" onclick="switchTab('notice')">📢 ৩. নোটিশ বোর্ড</a>
+        <button class="nav-item active" onclick="switchTab('home', this)">🏠 হোম</button>
+        <button class="nav-item" onclick="switchTab('qa', this)">❓ ১. এআই প্রশ্নোত্তর</button>
+        <button class="nav-item" onclick="switchTab('eval', this)">📝 ২. উত্তর মূল্যায়ন</button>
+        <button class="nav-item" onclick="switchTab('notice', this)">📢 ৩. নোটিশ বোর্ড</button>
     </div>
 
-    <!-- 1. Home Section -->
+    <!-- Home Section -->
     <div id="home" class="container section-view active">
         <div class="card-title">🏠 স্বাগতম Ai Universe-এ!</div>
-        <div class="card-desc">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম। ওপরের মেনু থেকে আপনার প্রয়োজনীয় ফিচারটি সিলেক্ট করুন।</div>
+        <div class="card-desc">আমাদের ডিজিটাল স্কুল পোর্টালে আপনাকে স্বাগতম। ওপরের মেনু থেকে আপনার প্রয়োজনীয় অপশনটিতে ক্লিক করুন।</div>
     </div>
 
-    <!-- 2. AI Q&A Section (Offline Instant Answer) -->
+    <!-- AI Q&A Section -->
     <div id="qa" class="container section-view">
         <div class="card-title">❓ এআই প্রশ্নোত্তর ও সমাধান</div>
         <div class="card-desc">আপনার পড়াশোনার যেকোনো প্রশ্ন নিচে লিখুন:</div>
@@ -193,7 +173,7 @@
         <div id="qaResult" class="result-box"></div>
     </div>
 
-    <!-- 3. Answer Evaluation Section -->
+    <!-- Answer Evaluation Section -->
     <div id="eval" class="container section-view">
         <div class="card-title">📝 উত্তর মূল্যায়ন</div>
         <div class="card-desc">আপনার লেখা উত্তরটি নিচে পেস্ট করুন:</div>
@@ -202,7 +182,7 @@
         <div id="evalResult" class="result-box"></div>
     </div>
 
-    <!-- 4. Notice Board Section -->
+    <!-- Notice Board Section -->
     <div id="notice" class="container section-view">
         <div class="card-title">📢 নোটিশ বোর্ড</div>
         <div class="card-desc">স্কুলের সর্বশেষ জরুরি নোটিশসমূহ:</div>
@@ -211,16 +191,17 @@
     </div>
 
     <script>
-        // Tab Switching Logic
-        function switchTab(tabId) {
+        function switchTab(tabId, element) {
+            // Hide all sections
             document.querySelectorAll('.section-view').forEach(el => el.classList.remove('active'));
+            // Remove active class from all buttons
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             
+            // Show target section and activate clicked button
             document.getElementById(tabId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            element.classList.add('active');
         }
 
-        // Offline Smart Q&A Database (No net fetching required, gives accurate answers instantly)
         const knowledgeBase = {
             "বিজ্ঞান কাকে বলে": "কোনো বিষয়ে সুশৃঙ্খল ও পরীক্ষিত বিশেষ জ্ঞানকে বিজ্ঞান বলে।",
             "বাংলাদেশের রাজধানী কোথায়": "বাংলাদেশের রাজধানী হলো ঢাকা।",
@@ -238,7 +219,6 @@
                 return;
             }
 
-            // Exact or partial match check in local database
             let foundAnswer = "";
             for (let key in knowledgeBase) {
                 if (query.toLowerCase().includes(key.toLowerCase())) {
@@ -250,12 +230,11 @@
             if (foundAnswer) {
                 resultBox.innerHTML = `<strong>💡 সঠিক উত্তর:</strong><br>${foundAnswer}`;
             } else {
-                resultBox.innerHTML = "<strong>💡 উত্তর:</strong> আপনার প্রশ্নটি সম্পর্কে আমাদের ডাটাবেসে নির্দিষ্ট তথ্য সংরক্ষিত নেই। দয়া করে সঠিক প্রশ্নটি লিখুন।";
+                resultBox.innerHTML = "<strong>💡 উত্তর:</strong> আপনার প্রশ্নটি সম্পর্কে আমাদের ডাটাবেসে নির্দিষ্ট তথ্য সংরক্ষিত নেই।";
             }
             resultBox.style.display = "block";
         }
 
-        // Evaluation Logic
         function evaluateAnswer() {
             let text = document.getElementById("evalInput").value.trim();
             let resultBox = document.getElementById("evalResult");
@@ -266,13 +245,12 @@
                 return;
             }
 
-            resultBox.innerHTML = "<strong>📊 মূল্যায়ন ফিডব্যাক:</strong><br>আপনার উত্তরটি গ্রহণ করা হয়েছে। লেখার গঠন চমৎকার হয়েছে! আপনি আরও নিখুঁত করতে ব্যাকরণ ও বানানগুলো পুনরায় চেক করতে পারেন। (পারফরম্যান্স রেটিং: চমৎকার/৮০%)";
+            resultBox.innerHTML = "<strong>📊 মূল্যায়ন ফিডব্যাক:</strong><br>আপনার উত্তরটি গ্রহণ করা হয়েছে। লেখার গঠন চমৎকার হয়েছে! (পারফরম্যান্স রেটিং: চমৎকার/৮০%)";
             resultBox.style.display = "block";
         }
     </script>
 
 </body>
 </html>
-
-
-    
+            
+        
